@@ -1,6 +1,8 @@
 package data
 
 import (
+	_classData "kelompok1/immersive-dash/features/class/data"
+	_feedbackData "kelompok1/immersive-dash/features/feedback/data"
 	"kelompok1/immersive-dash/features/user"
 
 	"gorm.io/gorm"
@@ -9,12 +11,14 @@ import (
 // struct user gorm model
 type User struct {
 	gorm.Model
-	FullName string `gorm:"column:full_name;not null"`
-	Email    string `gorm:"column:email;unique;not null"`
-	Password string `gorm:"column:password;not null"`
-	TeamId   uint   `gorm:"column:team_id;not null"`
-	Role     string `gorm:"type:enum('super admin','user');default:'user';column:role;not null"`
-	Status   bool   `gorm:"column:status;not null"`
+	FullName  string                   `gorm:"column:full_name;not null"`
+	Email     string                   `gorm:"column:email;unique;not null"`
+	Password  string                   `gorm:"column:password;not null"`
+	TeamId    uint                     `gorm:"column:team_id;not null"`
+	Role      string                   `gorm:"type:enum('super admin','user');default:'user';column:role;not null"`
+	Status    bool                     `gorm:"column:status;not null"`
+	Classes   []_classData.Class       `gorm:"foreignKey:UserId"`
+	Feedbacks []_feedbackData.Feedback `gorm:"foreignKey:UserId"`
 }
 
 // Mapping struct core to struct model

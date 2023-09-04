@@ -1,6 +1,9 @@
 package team
 
-import "time"
+import (
+	"kelompok1/immersive-dash/features/user"
+	"time"
+)
 
 type CoreTeam struct {
 	ID        uint
@@ -8,6 +11,7 @@ type CoreTeam struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt time.Time
+	Users     []user.CoreUser
 }
 
 type TeamDataInterface interface {

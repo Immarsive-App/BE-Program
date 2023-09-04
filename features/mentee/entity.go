@@ -1,6 +1,9 @@
 package mentee
 
-import "time"
+import (
+	"kelompok1/immersive-dash/features/feedback"
+	"time"
+)
 
 type CoreMentee struct {
 	ID                uint
@@ -23,6 +26,7 @@ type CoreMentee struct {
 	CreatedAt         time.Time
 	UpdatedAt         time.Time
 	DeletedAt         time.Time
+	Feedbacks       []feedback.CoreFeedback
 }
 
 type MenteeDataInterface interface {

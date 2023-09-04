@@ -1,6 +1,10 @@
 package status
 
-import "time"
+import (
+	"kelompok1/immersive-dash/features/feedback"
+	"kelompok1/immersive-dash/features/mentee"
+	"time"
+)
 
 type CoreStatus struct {
 	ID         uint
@@ -8,6 +12,8 @@ type CoreStatus struct {
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
 	DeletedAt  time.Time
+	Mentees    []mentee.CoreMentee
+	Feedbacks  []feedback.CoreFeedback
 }
 
 type StatusDataInterface interface {

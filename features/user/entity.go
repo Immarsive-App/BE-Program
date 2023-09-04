@@ -1,6 +1,10 @@
 package user
 
-import "time"
+import (
+	"kelompok1/immersive-dash/features/class"
+	"kelompok1/immersive-dash/features/feedback"
+	"time"
+)
 
 type CoreUser struct {
 	ID        uint
@@ -13,6 +17,8 @@ type CoreUser struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt time.Time
+	Classes   []class.CoreClass
+	Feedbacks []feedback.CoreFeedback
 }
 
 type UserDataInterface interface {

@@ -6,16 +6,13 @@ import (
 )
 
 type CoreClass struct {
-	ID          uint
-	UserId      uint
-	ClassName   string
-	Mentor      string
-	StartDate   string
-	GraduteDate string
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
-	DeletedAt   time.Time
-	Mentee      []mentee.CoreMentee
+	ID        uint
+	UserId    uint
+	ClassName string
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt time.Time
+	Mentee    []mentee.CoreMentee
 }
 
 type ClassDataInterface interface {
