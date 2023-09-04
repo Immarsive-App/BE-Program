@@ -11,9 +11,6 @@ type ClassRequest struct {
 
 func RequestToCore(input ClassRequest) class.CoreClass {
 	return class.CoreClass{
-		ClassName:   input.ClassName,
-		Mentor:      input.Mentor,
-		StartDate:   input.StartDate,
-		GraduteDate: input.GraduateDate,
+		ClassName: input.ClassName,
 	}
 }
