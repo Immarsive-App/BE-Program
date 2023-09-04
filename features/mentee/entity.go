@@ -7,8 +7,8 @@ type CoreMentee struct {
 	StatusId          uint
 	ClassId           uint
 	MenteeName        string
-	CurrentAdress     string
-	HomeAdress        string
+	CurrentAddress    string
+	HomeAddress       string
 	Email             string
 	Gender            string
 	Telegram          string

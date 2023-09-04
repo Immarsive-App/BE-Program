@@ -2,28 +2,23 @@ package handler
 
 import "kelompok1/immersive-dash/features/mentee"
 
-type LoginRequest struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
-}
-
 type MenteeRequest struct {
-	MenteeName        string `json:"mentee_name"`
-	Email             string `json:"email"`
-	Phone             string `json:"phone"`
-	CurrentAdress     string `json:"current_addess"`
-	HomeAdress        string `json:"home_addess"`
-	Telegram          string `json:"telegram"`
-	Gender            string `json:"gender"`
-	EducationType     string `json:"education_type"`
-	EducationMajor    string `json:"education_major"`
-	EducationGraduate string `json:"education_graduate"`
-	Institution       string `json:"institution"`
-	EmergencyName     string `json:"emergency_name"`
-	EmergencyPhone    string `json:"emergency_phone"`
-	EmergencyStatus   string `json:"emergency_status"`
-	StatusId          uint   `json:"status_id"`
-	ClassId           uint   `json:"class_id"`
+	StatusId          uint   `json:"status_id,omitempty" form:"status_id"`
+	ClassId           uint   `json:"class_id,omitempty" form:"class_id"`
+	MenteeName        string `json:"mentee_name,omitempty" form:"mentee_name"`
+	CurrentAddress    string `json:"current_address,omitempty" form:"current_address"`
+	HomeAddress       string `json:"home_address,omitempty" form:"home_address"`
+	Email             string `json:"email,omitempty" form:"email"`
+	Gender            string `json:"gender,omitempty" form:"gender"`
+	Telegram          string `json:"telegram,omitempty" form:"telegram"`
+	Phone             string `json:"phone,omitempty" form:"phone"`
+	EmergencyName     string `json:"emergency_name,omitempty" form:"emergency_name"`
+	EmergencyPhone    string `json:"emergency_phone,omitempty" form:"emergency_phone"`
+	EmergencyStatus   string `json:"emergency_status,omitempty" form:"emergency_status"`
+	EducationType     string `json:"education_type,omitempty" form:"education_type"`
+	EducationMajor    string `json:"education_major,omitempty" form:"education_major"`
+	Institution       string `json:"institution,omitempty" form:"institution"`
+	EducationGraduate string `json:"education_graduate,omitempty" form:"education_graduate"`
 }
 
 func RequestToCore(input MenteeRequest) mentee.CoreMentee {
@@ -31,8 +26,8 @@ func RequestToCore(input MenteeRequest) mentee.CoreMentee {
 		MenteeName:        input.MenteeName,
 		Email:             input.Email,
 		Phone:             input.Phone,
-		CurrentAdress:     input.CurrentAdress,
-		HomeAdress:        input.HomeAdress,
+		CurrentAddress:    input.CurrentAddress,
+		HomeAddress:       input.HomeAddress,
 		Telegram:          input.Telegram,
 		Gender:            input.Gender,
 		EducationType:     input.EducationType,

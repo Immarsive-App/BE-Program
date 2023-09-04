@@ -2,16 +2,11 @@ package handler
 
 import "kelompok1/immersive-dash/features/feedback"
 
-type LoginRequest struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
-}
-
 type FeedbackRequest struct {
-	Note     string `json:"notes"`
-	UserId   uint   `json:"user_id"`
-	MenteeId uint   `json:"mentee_id"`
-	StatusId uint   `json:"status_id"`
+	Note     string `json:"notes" form:"note"`
+	UserId   uint   `json:"user_id" form:"user_id"`
+	MenteeId uint   `json:"mentee_id" form:"mentee_id"`
+	StatusId uint   `json:"status_id" form:"status_id"`
 }
 
 func RequestToCore(input FeedbackRequest) feedback.CoreFeedback {

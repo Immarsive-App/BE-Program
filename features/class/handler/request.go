@@ -2,11 +2,6 @@ package handler
 
 import "kelompok1/immersive-dash/features/class"
 
-type LoginRequest struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
-}
-
 type ClassRequest struct {
 	ClassName    string `json:"class_name"`
 	Mentor       string `json:"mentor"`

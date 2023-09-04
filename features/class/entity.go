@@ -1,6 +1,9 @@
 package class
 
-import "time"
+import (
+	"kelompok1/immersive-dash/features/mentee"
+	"time"
+)
 
 type CoreClass struct {
 	ID          uint
@@ -12,12 +15,11 @@ type CoreClass struct {
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 	DeletedAt   time.Time
+	Mentee      []mentee.CoreMentee
 }
 
 type ClassDataInterface interface {
-	// SelectAll() ([]Core, error)
 }
 
 type ClassServiceInterface interface {
-	// GetAll() ([]Core, error)
 }

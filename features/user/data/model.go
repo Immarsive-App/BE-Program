@@ -9,12 +9,12 @@ import (
 // struct user gorm model
 type User struct {
 	gorm.Model
-	FullName string
-	Email    string `gorm:"unique"`
-	Password string
-	TeamId   uint
-	Role     string
-	Status   bool
+	FullName string `gorm:"column:full_name;not null"`
+	Email    string `gorm:"column:email;unique;not null"`
+	Password string `gorm:"column:password;not null"`
+	TeamId   uint   `gorm:"column:team_id;not null"`
+	Role     string `gorm:"type:enum('super admin','user');default:'user';column:role;not null"`
+	Status   bool   `gorm:"column:status;not null"`
 }
 
 // Mapping struct core to struct model

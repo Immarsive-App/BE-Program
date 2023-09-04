@@ -13,3 +13,17 @@ func WebResponse(code int, message string, data interface{}) MapResponse {
 		Data:    data,
 	}
 }
+
+func SuccessResponse(message string, data interface{}) map[string]interface{} {
+	return map[string]interface{}{
+		"message": message,
+		"data":    data,
+	}
+}
+
+func FailResponse(message string, data interface{}) map[string]interface{} {
+	return map[string]interface{}{
+		"message": message,
+		"data":    data,
+	}
+}
