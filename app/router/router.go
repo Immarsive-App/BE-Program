@@ -1,9 +1,9 @@
 package router
 
 import (
-	"kelompok1/immersive-dash/features/team/data"
-	"kelompok1/immersive-dash/features/team/handler"
-	"kelompok1/immersive-dash/features/team/service"
+	"kelompok1/immersive-dash/features/user/data"
+	"kelompok1/immersive-dash/features/user/handler"
+	"kelompok1/immersive-dash/features/user/service"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
