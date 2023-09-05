@@ -19,5 +19,5 @@ func InitialMigration(db *gorm.DB) {
 	db.AutoMigrate(&_menteeData.Mentee{})
 	db.AutoMigrate(&_statusData.Status{})
 	db.AutoMigrate(&_feedbackData.Feedback{})
-	
+
 }

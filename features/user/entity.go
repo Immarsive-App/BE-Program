@@ -22,7 +22,9 @@ type CoreUser struct {
 }
 
 type UserDataInterface interface {
+	Login(email string)(CoreUser, error)
 }
 
 type UserServiceInterface interface {
+	Login(email string, password string)(CoreUser, string, error)
 }
