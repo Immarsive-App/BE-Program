@@ -31,7 +31,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/be18-images:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/project2images:latest
       - 
         name: connect to server using SSH
         uses: appleboy/ssh-action@v1.0.0
@@ -43,6 +43,6 @@ jobs:
           script: |
             docker stop be18Container
             docker rm be18Container
-            docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/be18-images
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/be18-images
-            docker run -d -p 8000:8000 -e JWTSECRET=${{ secrets.JWTSECRET }} -e DBUSER=${{ secrets.DBUSER }} -e DBPASS=${{ secrets.DBPASS }} -e DBHOST=${{ secrets.DBHOST }} -e DBPORT=${{ secrets.DBPORT }} -e DBNAME=${{ secrets.DBNAME }} --name be18Container ${{ secrets.DOCKERHUB_USERNAME }}/be18-images:latest
+            docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/project2images
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/project2images:latest
+            docker run -d -p 8000:8000 -e JWTSECRET=${{ secrets.JWTSECRET }} -e DBUSER=${{ secrets.DBUSER }} -e DBPASS=${{ secrets.DBPASS }} -e DBHOST=${{ secrets.DBHOST }} -e DBPORT=${{ secrets.DBPORT }} -e DBNAME=${{ secrets.DBNAME }} --name be18Container ${{ secrets.DOCKERHUB_USERNAME }}/project2images:latest
