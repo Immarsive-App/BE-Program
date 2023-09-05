@@ -1,17 +1,17 @@
 package data
 
 import (
-	"kelompok1/immersive-dash/features/class"
+	"kelompok1/immersive-dash/features/status"
 
 	"gorm.io/gorm"
 )
 
-type classQuery struct {
+type statusQuery struct {
 	db *gorm.DB
 }
 
-func New(db *gorm.DB) class.ClassDataInterface {
-	return &classQuery{
+func New(db *gorm.DB) status.StatusDataInterface {
+	return &statusQuery{
 		db: db,
 	}
 }
