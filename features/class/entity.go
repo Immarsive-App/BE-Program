@@ -16,7 +16,17 @@ type CoreClass struct {
 }
 
 type ClassDataInterface interface {
+	SelectAll() ([]CoreClass, error)
+	Insert(input CoreClass) error
+	SelectById(id uint) (CoreClass, error)
+	Update(id uint, input CoreClass) error
+	Delete(id uint) error
 }
 
 type ClassServiceInterface interface {
+	GetAll() ([]CoreClass, error)
+	Create(input CoreClass) error
+	GetById(id uint) (CoreClass, error)
+	Update(id uint, input CoreClass) error
+	Deletes(id uint) error
 }
