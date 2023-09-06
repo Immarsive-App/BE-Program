@@ -10,6 +10,10 @@ import (
 )
 
 func main() {
+	// logger := helpers.NewLogger()
+	// logger.SetFormatter(&logrus.TextFormatter{}) // Atur formatter sesuai kebutuhan
+	// logger.SetLevel(logrus.InfoLevel)            // Atur tingkat log sesuai kebutuhan
+
 	cfg := config.InitConfig()
 	dbMysql := database.InitDBMysql(cfg)
 	database.InitialMigration(dbMysql)

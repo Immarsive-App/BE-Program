@@ -40,6 +40,9 @@ func (repo *menteeQuery) SelectAll() ([]mentee.CoreMentee, error) {
 	if tx.Error != nil {
 		return nil, errors.New(tx.Error.Error() + ", failed to get mentee")
 	}
+	if tx.RowsAffected == 0 {
+		return nil, errors.New("Mentee not found")
+	}
 	//Mapping Mentee to Corementee
 	coreMenteeSlice := ListModelToCore(dataMentee)
 	return coreMenteeSlice, nil
@@ -51,6 +54,9 @@ func (repo *menteeQuery) Select(menteeId uint) (mentee.CoreMentee, error) {
 	tx := repo.db.Preload("Feedbacks").First(&dataMentee, menteeId)
 	if tx.Error != nil {
 		return mentee.CoreMentee{}, errors.New(tx.Error.Error() + ", failed to get mentee")
+	}
+	if tx.RowsAffected == 0 {
+		return mentee.CoreMentee{}, errors.New("Mentee not found")
 	}
 	//Mapping Mentee to Corementee
 	coreMentee := ModelToCore(dataMentee)
@@ -64,6 +70,9 @@ func (repo *menteeQuery) Update(menteeId uint, updatedMentee mentee.CoreMentee) 
 	if tx.Error != nil {
 		return errors.New(tx.Error.Error() + ", failed to get mentee")
 	}
+	if tx.RowsAffected == 0 {
+		return errors.New("Mentee not found")
+	}
 	input := CoreToModel(updatedMentee)
 	tx = repo.db.Model(&mentee).Updates(input)
 	if tx.Error != nil {
@@ -75,14 +84,12 @@ func (repo *menteeQuery) Update(menteeId uint, updatedMentee mentee.CoreMentee) 
 
 // Delete implements mentee.MenteeDataInterface.
 func (repo *menteeQuery) Delete(menteeId uint) error {
-	var mentee Mentee
-	tx := repo.db.First(&mentee, menteeId)
+	tx := repo.db.Delete(&Mentee{}, menteeId)
 	if tx.Error != nil {
-		return errors.New(tx.Error.Error() + ", failed to get mentee")
+		return errors.New(tx.Error.Error() + ", failed to deactive mentee")
 	}
-	tx = repo.db.Delete(&mentee, menteeId)
-	if tx.Error != nil {
-		return errors.New(tx.Error.Error() + ", failed to delete mentee")
+	if tx.RowsAffected == 0 {
+		return errors.New("Mentee not found")
 	}
 	return nil
 }

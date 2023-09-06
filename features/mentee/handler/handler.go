@@ -5,6 +5,7 @@ import (
 	"kelompok1/immersive-dash/helpers"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/labstack/echo/v4"
 )
@@ -20,21 +21,21 @@ func New(service mentee.MenteeServiceInterface) *MenteeHandler {
 }
 
 func (handler *MenteeHandler) CreateMentee(c echo.Context) error {
-	newMenteeData := new(MenteeRequest)
+	var mentee mentee.CoreMentee
 
 	//mendapatkan data yang dikirm oleh FE melalui request
-	err := c.Bind(&newMenteeData)
+	err := c.Bind(&mentee)
 	if err != nil {
 		return c.JSON(http.StatusUnprocessableEntity, helpers.WebResponse(http.StatusUnprocessableEntity, "error bind data", nil))
 	}
 
-	//mapping from mentee req to core mentee
-	newMentee := RequestToCore(*newMenteeData)
-	_, err = handler.menteeService.Create(newMentee)
+	menteeId, err := handler.menteeService.Create(mentee)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, helpers.WebResponse(http.StatusInternalServerError, "error insert data, "+err.Error(), nil))
 	}
-	return c.JSON(http.StatusCreated, helpers.WebResponse(http.StatusCreated, "success create mentee", nil))
+	mentee.ID = menteeId
+	newMenteeResponse := CoreToCreateDeleteResponse(mentee)
+	return c.JSON(http.StatusCreated, helpers.WebResponse(http.StatusCreated, "success create mentee", newMenteeResponse))
 }
 
 func (handler *MenteeHandler) GetAllMentee(c echo.Context) error {
@@ -42,9 +43,9 @@ func (handler *MenteeHandler) GetAllMentee(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, helpers.WebResponse(http.StatusInternalServerError, "error read data, "+err.Error(), nil))
 	}
-	var menteesResponse []MenteeResponse
+	var menteesResponse []GetAllMenteeResponse
 	for _, v := range result {
-		menteesResponse = append(menteesResponse, CoreToResponse(v))
+		menteesResponse = append(menteesResponse, CoreToGetAllResponse(v))
 	}
 	return c.JSON(http.StatusOK, helpers.WebResponse(http.StatusFound, "success read data", menteesResponse))
 }
@@ -59,7 +60,7 @@ func (handler *MenteeHandler) GetMenteeById(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, helpers.WebResponse(http.StatusInternalServerError, "error read data, "+err.Error(), nil))
 	}
 
-	resultResponse := CoreToResponse(result)
+	resultResponse := CoreToGetByIdResponse(result)
 	return c.JSON(http.StatusOK, helpers.WebResponse(http.StatusFound, "success read data", resultResponse))
 }
 
@@ -90,7 +91,7 @@ func (handler *MenteeHandler) UpdateMenteeById(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, helpers.WebResponse(http.StatusBadRequest, "mentee not found", nil))
 	}
 	// Mapping updated mentee to MenteeResponse
-	resultResponse := CoreToResponse(updatedMentee)
+	resultResponse := CoreToUpdateResponse(updatedMentee)
 	// Kirim respon JSON
 	return c.JSON(http.StatusOK, helpers.WebResponse(http.StatusOK, "mentee updated successfully", resultResponse))
 }
@@ -101,11 +102,17 @@ func (handler *MenteeHandler) DeleteMenteeById(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, helpers.WebResponse(http.StatusBadRequest, "mentee id is not valid", nil))
 	}
+	mentee, err := handler.menteeService.GetById(uint(idConv))
+	if err != nil {
+		return c.JSON(http.StatusNotFound, helpers.WebResponse(http.StatusNotFound, "Mentee not found", nil))
+	}
 	err = handler.menteeService.Delete(uint(idConv))
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, helpers.WebResponse(http.StatusInternalServerError, "error delete data, "+err.Error(), nil))
+		if strings.Contains(err.Error(), "Mentee not found") {
+			return c.JSON(http.StatusNotFound, helpers.WebResponse(http.StatusNotFound, "Mentee not found", nil))
+		}
+		return c.JSON(http.StatusInternalServerError, helpers.WebResponse(http.StatusInternalServerError, "error deactivating data, "+err.Error(), nil))
 	}
-	return c.JSON(http.StatusOK, helpers.WebResponse(http.StatusOK, "success delete mentee", nil))
+	menteeResponse := CoreToCreateDeleteResponse(mentee)
+	return c.JSON(http.StatusOK, helpers.WebResponse(http.StatusOK, "Deactivate specific mentee", menteeResponse))
 }
-
-// func (handler *MenteeHandler) CreateMentee(c echo.Context) error {}

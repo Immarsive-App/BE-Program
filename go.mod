@@ -3,11 +3,13 @@ module kelompok1/immersive-dash
 go 1.20
 
 require (
+	github.com/fatih/color v1.13.0
 	github.com/go-playground/validator/v10 v10.15.3
 	github.com/golang-jwt/jwt/v5 v5.0.0
 	github.com/labstack/echo-jwt/v4 v4.2.0
 	github.com/labstack/echo/v4 v4.11.1
 	github.com/labstack/gommon v0.4.0
+	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/viper v1.16.0
 	golang.org/x/crypto v0.12.0
 	gorm.io/driver/mysql v1.5.1
