@@ -5,7 +5,7 @@ import "kelompok1/immersive-dash/features/mentee"
 type MenteeRequest struct {
 	StatusId          uint   `json:"status_id,omitempty" form:"status_id"`
 	ClassId           uint   `json:"class_id,omitempty" form:"class_id"`
-	MenteeName        string `json:"mentee_name,omitempty" form:"mentee_name"`
+	FullName          string `json:"full_name,omitempty" form:"full_name"`
 	CurrentAddress    string `json:"current_address,omitempty" form:"current_address"`
 	HomeAddress       string `json:"home_address,omitempty" form:"home_address"`
 	Email             string `json:"email,omitempty" form:"email"`
@@ -23,7 +23,7 @@ type MenteeRequest struct {
 
 func RequestToCore(input MenteeRequest) mentee.CoreMentee {
 	return mentee.CoreMentee{
-		MenteeName:        input.MenteeName,
+		FullName:          input.FullName,
 		Email:             input.Email,
 		Phone:             input.Phone,
 		CurrentAddress:    input.CurrentAddress,

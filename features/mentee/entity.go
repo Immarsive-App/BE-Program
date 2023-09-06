@@ -7,32 +7,40 @@ import (
 
 type CoreMentee struct {
 	ID                uint
-	StatusId          uint
+	StatusId          uint `validate:"required"`
 	ClassId           uint
-	MenteeName        string
-	CurrentAddress    string
-	HomeAddress       string
-	Email             string
-	Gender            string
-	Telegram          string
-	Phone             string
-	EmergencyName     string
-	EmergencyPhone    string
-	EmergencyStatus   string
-	EducationType     string
-	EducationMajor    string
-	Institution       string
-	EducationGraduate string
+	FullName          string `validate:"required"`
+	CurrentAddress    string `validate:"required"`
+	HomeAddress       string `validate:"required"`
+	Email             string `validate:"required,email"`
+	Gender            string `validate:"required"`
+	Telegram          string `validate:"required"`
+	Phone             string `validate:"required"`
+	EmergencyName     string `validate:"required"`
+	EmergencyPhone    string `validate:"required"`
+	EmergencyStatus   string `validate:"required"`
+	EducationType     string `validate:"required"`
+	EducationMajor    string `validate:"required"`
+	Institution       string `validate:"required"`
+	EducationGraduate string `validate:"required"`
 	CreatedAt         time.Time
 	UpdatedAt         time.Time
 	DeletedAt         time.Time
-	Feedbacks       []feedback.CoreFeedback
+	Feedbacks         []feedback.CoreFeedback
 }
 
 type MenteeDataInterface interface {
-	// SelectAll() ([]Core, error)
+	Insert(input CoreMentee) (uint, error)
+	SelectAll() ([]CoreMentee, error)
+	Select(menteeId uint) (CoreMentee, error)
+	Update(menteeId uint, updatedMentee CoreMentee) error
+	Delete(menteeId uint) error
 }
 
 type MenteeServiceInterface interface {
-	// GetAll() ([]Core, error)
+	Create(input CoreMentee) (uint, error)
+	GetAll() ([]CoreMentee, error)
+	GetById(menteeId uint) (CoreMentee, error)
+	Update(menteeId uint, updatedMentee CoreMentee) error
+	Delete(menteeId uint) error
 }
