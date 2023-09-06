@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"kelompok1/immersive-dash/features/feedback"
 	"kelompok1/immersive-dash/features/mentee"
 )
 
@@ -22,9 +21,9 @@ type GetAllMenteeResponse struct {
 	Gender        string `json:"gender"`
 }
 type UpdateResponse struct {
-	ID uint `json:"mentee_id,omitempty" form:"mentee_id"`
-	// StatusId          uint   `json:"status_id,omitempty" form:"status_id"`
-	// ClassId           uint   `json:"class_id,omitempty" form:"class_id"`
+	ID                uint   `json:"mentee_id,omitempty" form:"mentee_id"`
+	StatusId          uint   `json:"status_id,omitempty" form:"status_id"`
+	ClassId           uint   `json:"class_id,omitempty" form:"class_id"`
 	FullName          string `json:"full_name,omitempty" form:"full_name"`
 	CurrentAddress    string `json:"current_address,omitempty" form:"current_address"`
 	HomeAddress       string `json:"home_address,omitempty" form:"home_address"`
@@ -59,7 +58,6 @@ type GetByIdResponse struct {
 	Institution       string `json:"institution,omitempty" form:"institution"`
 	EducationMajor    string `json:"major,omitempty" form:"major"`
 	EducationGraduate string `json:"graduate,omitempty" form:"graduate"`
-	Feedbacks         []feedback.CoreFeedback
 }
 
 func CoreToCreateDeleteResponse(mentee mentee.CoreMentee) CreateDeleteResponse {
@@ -75,9 +73,9 @@ func CoreToCreateDeleteResponse(mentee mentee.CoreMentee) CreateDeleteResponse {
 
 func CoreToUpdateResponse(mentee mentee.CoreMentee) UpdateResponse {
 	return UpdateResponse{
-		ID: mentee.ID,
-		// StatusId:          mentee.StatusId,
-		// ClassId:           mentee.ClassId,
+		ID:                mentee.ID,
+		StatusId:          mentee.StatusId,
+		ClassId:           mentee.ClassId,
 		FullName:          mentee.FullName,
 		CurrentAddress:    mentee.CurrentAddress,
 		HomeAddress:       mentee.HomeAddress,
@@ -114,7 +112,6 @@ func CoreToGetByIdResponse(mentee mentee.CoreMentee) GetByIdResponse {
 		Institution:       mentee.Institution,
 		EducationMajor:    mentee.EducationMajor,
 		EducationGraduate: mentee.EducationGraduate,
-		Feedbacks:         mentee.Feedbacks,
 	}
 }
 

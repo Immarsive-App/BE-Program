@@ -3,22 +3,22 @@ package handler
 import "kelompok1/immersive-dash/features/mentee"
 
 type MenteeRequest struct {
-	StatusId          uint   `json:"status_id,omitempty" form:"status_id"`
-	ClassId           uint   `json:"class_id,omitempty" form:"class_id"`
-	FullName          string `json:"full_name,omitempty" form:"full_name"`
-	CurrentAddress    string `json:"current_address,omitempty" form:"current_address"`
-	HomeAddress       string `json:"home_address,omitempty" form:"home_address"`
-	Email             string `json:"email,omitempty" form:"email"`
-	Gender            string `json:"gender,omitempty" form:"gender"`
-	Telegram          string `json:"telegram,omitempty" form:"telegram"`
-	Phone             string `json:"phone,omitempty" form:"phone"`
-	EmergencyName     string `json:"emergency_name,omitempty" form:"emergency_name"`
-	EmergencyPhone    string `json:"emergency_phone,omitempty" form:"emergency_phone"`
-	EmergencyStatus   string `json:"emergency_status,omitempty" form:"emergency_status"`
-	EducationType     string `json:"education_type,omitempty" form:"education_type"`
-	EducationMajor    string `json:"education_major,omitempty" form:"education_major"`
-	Institution       string `json:"institution,omitempty" form:"institution"`
-	EducationGraduate string `json:"education_graduate,omitempty" form:"education_graduate"`
+	StatusId          uint   `json:"status_id" form:"status_id"`
+	ClassId           uint   `json:"class_id" form:"class_id"`
+	FullName          string `json:"full_name" form:"full_name"`
+	CurrentAddress    string `json:"current_address" form:"current_address"`
+	HomeAddress       string `json:"home_address" form:"home_address"`
+	Email             string `json:"email" form:"email"`
+	Gender            string `json:"gender" form:"gender"`
+	Telegram          string `json:"telegram" form:"telegram"`
+	Phone             string `json:"phone" form:"phone"`
+	EmergencyName     string `json:"emergency_name" form:"emergency_name"`
+	EmergencyPhone    string `json:"emergency_phone" form:"emergency_phone"`
+	EmergencyStatus   string `json:"emergency_status" form:"emergency_status"`
+	EducationType     string `json:"education_type" form:"education_type"`
+	EducationMajor    string `json:"education_major" form:"education_major"`
+	Institution       string `json:"institution" form:"institution"`
+	EducationGraduate string `json:"education_graduate" form:"education_graduate"`
 }
 
 func RequestToCore(input MenteeRequest) mentee.CoreMentee {

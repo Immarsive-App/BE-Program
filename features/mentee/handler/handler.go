@@ -21,20 +21,20 @@ func New(service mentee.MenteeServiceInterface) *MenteeHandler {
 }
 
 func (handler *MenteeHandler) CreateMentee(c echo.Context) error {
-	var mentee mentee.CoreMentee
-
+	//var mentee mentee.CoreMentee
+	NewUser := new(MenteeRequest)
 	//mendapatkan data yang dikirm oleh FE melalui request
-	err := c.Bind(&mentee)
+	err := c.Bind(&NewUser)
 	if err != nil {
 		return c.JSON(http.StatusUnprocessableEntity, helpers.WebResponse(http.StatusUnprocessableEntity, "error bind data", nil))
 	}
-
-	menteeId, err := handler.menteeService.Create(mentee)
+	input := RequestToCore(*NewUser)
+	menteeId, err := handler.menteeService.Create(input)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, helpers.WebResponse(http.StatusInternalServerError, "error insert data, "+err.Error(), nil))
 	}
-	mentee.ID = menteeId
-	newMenteeResponse := CoreToCreateDeleteResponse(mentee)
+	input.ID = menteeId
+	newMenteeResponse := CoreToCreateDeleteResponse(input)
 	return c.JSON(http.StatusCreated, helpers.WebResponse(http.StatusCreated, "success create mentee", newMenteeResponse))
 }
 

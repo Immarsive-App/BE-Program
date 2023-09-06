@@ -7,22 +7,22 @@ import (
 
 type CoreMentee struct {
 	ID                uint
-	StatusId          uint `validate:"required"`
+	StatusId          uint
 	ClassId           uint
-	FullName          string `validate:"required"`
-	CurrentAddress    string `validate:"required"`
-	HomeAddress       string `validate:"required"`
-	Email             string `validate:"required,email"`
-	Gender            string `validate:"required"`
-	Telegram          string `validate:"required"`
-	Phone             string `validate:"required"`
-	EmergencyName     string `validate:"required"`
-	EmergencyPhone    string `validate:"required"`
-	EmergencyStatus   string `validate:"required"`
-	EducationType     string `validate:"required"`
-	EducationMajor    string `validate:"required"`
-	Institution       string `validate:"required"`
-	EducationGraduate string `validate:"required"`
+	FullName          string
+	CurrentAddress    string
+	HomeAddress       string
+	Email             string /*`validate:"required,email"`*/
+	Gender            string
+	Telegram          string
+	Phone             string
+	EmergencyName     string
+	EmergencyPhone    string
+	EmergencyStatus   string
+	EducationType     string
+	EducationMajor    string
+	Institution       string
+	EducationGraduate string
 	CreatedAt         time.Time
 	UpdatedAt         time.Time
 	DeletedAt         time.Time
