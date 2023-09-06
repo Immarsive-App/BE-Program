@@ -11,12 +11,12 @@ import (
 // struct user gorm model
 type User struct {
 	gorm.Model
-	FullName  string                   `gorm:"column:full_name;not null"`
-	Email     string                   `gorm:"column:email;unique;not null"`
-	Password  string                   `gorm:"column:password;not null"`
-	TeamId    uint                     `gorm:"column:team_id;not null"`
-	Role      string                   `gorm:"type:enum('super admin','user');default:'user';column:role;not null"`
-	Status    bool                     `gorm:"column:status;not null"`
+	FullName string `gorm:"column:full_name;not null"`
+	Email    string `gorm:"column:email;unique;not null"`
+	Password string `gorm:"column:password;not null"`
+	TeamId   uint   `gorm:"column:team_id;not null"`
+	Role     string `gorm:"type:enum('super admin','user');default:'user';column:role;not null"`
+	//Status    bool                     `gorm:"column:status;not null"`
 	Classes   []_classData.Class       `gorm:"foreignKey:UserId"`
 	Feedbacks []_feedbackData.Feedback `gorm:"foreignKey:UserId"`
 }
@@ -29,20 +29,20 @@ func CoreToModel(dataCore user.CoreUser) User {
 		Password: dataCore.Password,
 		TeamId:   dataCore.TeamId,
 		Role:     dataCore.Role,
-		Status:   dataCore.Status,
+		//Status:   dataCore.Status,
 	}
 }
 
 // mapping struct model to struct core
 func ModelToCore(dataModel User) user.CoreUser {
 	return user.CoreUser{
-		ID:        dataModel.ID,
-		FullName:  dataModel.FullName,
-		Email:     dataModel.Email,
-		Password:  dataModel.Password,
-		TeamId:    dataModel.TeamId,
-		Role:      dataModel.Role,
-		Status:    dataModel.Status,
+		ID:       dataModel.ID,
+		FullName: dataModel.FullName,
+		Email:    dataModel.Email,
+		Password: dataModel.Password,
+		TeamId:   dataModel.TeamId,
+		Role:     dataModel.Role,
+		//Status:    dataModel.Status,
 		CreatedAt: dataModel.CreatedAt,
 		UpdatedAt: dataModel.UpdatedAt,
 		DeletedAt: dataModel.DeletedAt.Time,
