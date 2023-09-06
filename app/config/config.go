@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -9,7 +10,7 @@ import (
 )
 
 var (
-	JWT_SECRET = ""
+	SECRET_JWT = ""
 )
 
 type AppConfig struct {
@@ -18,7 +19,7 @@ type AppConfig struct {
 	DB_HOSTNAME string
 	DB_PORT     int
 	DB_NAME     string
-	// JWT_SECRET  string
+	JWT_SECRET  string
 	// APP_PATH    string
 }
 
@@ -53,7 +54,7 @@ func ReadEnv() *AppConfig {
 		isRead = false
 	}
 	if val, found := os.LookupEnv("JWTSECRET"); found {
-		JWT_SECRET = val
+		app.JWT_SECRET = val
 		isRead = false
 	}
 
@@ -73,8 +74,10 @@ func ReadEnv() *AppConfig {
 		app.DB_HOSTNAME = viper.Get("DBHOST").(string)
 		app.DB_PORT, _ = strconv.Atoi(viper.Get("DBPORT").(string))
 		app.DB_NAME = viper.Get("DBNAME").(string)
-		JWT_SECRET = viper.Get("JWTSECRET").(string)
+		app.JWT_SECRET = viper.Get("JWTSECRET").(string)
 	}
 
+	SECRET_JWT = app.JWT_SECRET
+	fmt.Println("check", app.JWT_SECRET)
 	return &app
 }
