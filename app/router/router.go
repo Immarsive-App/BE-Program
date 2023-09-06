@@ -43,4 +43,5 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 
 	// Status
 	e.GET("/statuses", statusHandlerAPI.GetAllStatus, middlewares.JWTMiddleware())
+
 }
