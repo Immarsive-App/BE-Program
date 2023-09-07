@@ -33,8 +33,13 @@ func (service *menteeService) Create(input mentee.CoreMentee) (uint, error) {
 }
 
 // GetAll implements mentee.MenteeServiceInterface.
-func (service *menteeService) GetAll() ([]mentee.CoreMentee, error) {
-	panic("unimplemented")
+func (service *menteeService) GetAll(nameQuery map[string]any) ([]mentee.CoreMentee, error) {
+
+	result, err := service.menteeData.SelectAll(nameQuery)
+	if err != nil {
+		return nil, fmt.Errorf("error: %v", err)
+	}
+	return result, nil
 }
 
 // GetById implements mentee.MenteeServiceInterface.

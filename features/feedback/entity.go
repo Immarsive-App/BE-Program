@@ -3,14 +3,14 @@ package feedback
 import "time"
 
 type CoreFeedback struct {
-	ID        uint     
-	UserId    uint      
-	MenteeId  uint      
-	StatusId  uint      
-	Note      string    
-	CreatedAt time.Time 
-	UpdatedAt time.Time 
-	DeletedAt time.Time 
+	ID        uint
+	UserId    uint
+	MenteeId  uint
+	StatusId  uint
+	Note      string
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt time.Time
 }
 
 type FeedbackDataInterface interface {

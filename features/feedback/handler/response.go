@@ -5,5 +5,5 @@ type FeedbackResponse struct {
 	MenteeId uint   `json:"mentee_id"`
 	Note     string `json:"note"`
 	UserId   uint   `json:"user_id"` //user yang kasih feedback dari user id ke nama user
-	StatusId uint   `json:"status"`
+	StatusId uint   `json:"status_id"`
 }

@@ -2,8 +2,6 @@ package data
 
 import (
 	"kelompok1/immersive-dash/features/class"
-	"kelompok1/immersive-dash/features/mentee"
-	"kelompok1/immersive-dash/features/mentee/data"
 
 	"gorm.io/gorm"
 )
@@ -11,9 +9,8 @@ import (
 // struct Class gorm model
 type Class struct {
 	gorm.Model
-	UserId    uint          `gorm:"column:user_id;not null"`
-	ClassName string        `gorm:"column:class_name;not null"`
-	Mentees   []data.Mentee `gorm:"foreignKey:ClassId"`
+	UserId    uint   `gorm:"column:user_id;not null"`
+	ClassName string `gorm:"column:class_name;not null"`
 }
 
 func CoreToModel(dataCore class.CoreClass) Class {
@@ -21,7 +18,6 @@ func CoreToModel(dataCore class.CoreClass) Class {
 		Model:     gorm.Model{},
 		UserId:    dataCore.UserId,
 		ClassName: dataCore.ClassName,
-		Mentees:   []data.Mentee{},
 	}
 }
 
@@ -34,7 +30,6 @@ func ModelToCore(dataModel Class) class.CoreClass {
 		CreatedAt: dataModel.CreatedAt,
 		UpdatedAt: dataModel.UpdatedAt,
 		DeletedAt: dataModel.DeletedAt.Time,
-		Mentee:    []mentee.CoreMentee{},
 	}
 }
 

@@ -39,7 +39,25 @@ func (handler *MenteeHandler) CreateMentee(c echo.Context) error {
 }
 
 func (handler *MenteeHandler) GetAllMentee(c echo.Context) error {
-	result, err := handler.menteeService.GetAll()
+	// Buat query map dengan kriteria pencarian
+	nameQuery := map[string]any{}
+	// 	"class_name":     className,
+	// 	"status_name":    statusName,
+	// 	"education_type": educationType,
+	// }
+	className := c.QueryParam("class_name")
+	if className != "" {
+		nameQuery["class_name"] = className
+	}
+	statusName := c.QueryParam("status_name")
+	if statusName != "" {
+		nameQuery["status_name"] = statusName
+	}
+	educationType := c.QueryParam("education_type")
+	if educationType != "" {
+		nameQuery["education_type"] = educationType
+	}
+	result, err := handler.menteeService.GetAll(nameQuery)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, helpers.WebResponse(http.StatusInternalServerError, "error read data, "+err.Error(), nil))
 	}
@@ -61,6 +79,20 @@ func (handler *MenteeHandler) GetMenteeById(c echo.Context) error {
 	}
 
 	resultResponse := CoreToGetByIdResponse(result)
+	return c.JSON(http.StatusOK, helpers.WebResponse(http.StatusFound, "success read data", resultResponse))
+}
+func (handler *MenteeHandler) GetMenteeFeedback(c echo.Context) error {
+	idParam := c.Param("mentee_id")
+	idConv, err := strconv.Atoi(idParam)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, helpers.WebResponse(http.StatusBadRequest, "mentee id is not valid", nil))
+	}
+	result, err := handler.menteeService.GetById(uint(idConv))
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, helpers.WebResponse(http.StatusInternalServerError, "error read data, "+err.Error(), nil))
+	}
+
+	resultResponse := CoreToGetMenteeFeedbackResponse(result)
 	return c.JSON(http.StatusOK, helpers.WebResponse(http.StatusFound, "success read data", resultResponse))
 }
 

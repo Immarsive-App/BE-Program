@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"kelompok1/immersive-dash/features/feedback"
 	"kelompok1/immersive-dash/features/mentee"
 )
 
@@ -58,6 +59,18 @@ type GetByIdResponse struct {
 	Institution       string `json:"institution,omitempty" form:"institution"`
 	EducationMajor    string `json:"major,omitempty" form:"major"`
 	EducationGraduate string `json:"graduate,omitempty" form:"graduate"`
+}
+
+type GetMenteeFeedbackResponse struct {
+	ID             uint   `json:"mentee_id,omitempty" form:"mentee_id"`
+	FullName       string `json:"full_name,omitempty" form:"full_name"`
+	ClassId        uint   `json:"class_id,omitempty" form:"class_id"`
+	EducationMajor string `json:"major,omitempty" form:"major"`
+	Email          string `json:"email,omitempty" form:"email"`
+	Institution    string `json:"institution,omitempty" form:"institution"`
+	Phone          string `json:"phone,omitempty" form:"phone"`
+	Telegram       string `json:"telegram,omitempty" form:"telegram"`
+	Feedbacks      []feedback.CoreFeedback
 }
 
 func CoreToCreateDeleteResponse(mentee mentee.CoreMentee) CreateDeleteResponse {
@@ -124,4 +137,19 @@ func CoreToGetAllResponse(mentee mentee.CoreMentee) GetAllMenteeResponse {
 		EducationType: mentee.EducationType,
 		Gender:        mentee.Gender,
 	}
+}
+
+func CoreToGetMenteeFeedbackResponse(mentee mentee.CoreMentee) GetMenteeFeedbackResponse {
+	return GetMenteeFeedbackResponse{
+		ID:       mentee.ID,
+		FullName: mentee.FullName,
+		// ClassId:        mentee.ClassId,
+		// EducationMajor: mentee.EducationMajor,
+		// Institution:    mentee.Institution,
+		// Phone:          mentee.Phone,
+		// Telegram:       mentee.Telegram,
+		// Email:          mentee.Email,
+		Feedbacks: mentee.Feedbacks,
+	}
+
 }
