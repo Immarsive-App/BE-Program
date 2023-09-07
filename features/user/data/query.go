@@ -29,9 +29,9 @@ func (repo *userQuery) Insert(input user.CoreUser) error {
 		Password: input.Password,
 		TeamId:   input.TeamId,
 		Role:     input.Role,
-		//Status:   input.Status,
+		Status:   input.Status,
 	}
-	//userGorm.Password = helpers.HashPassword(input.Password)
+	userGorm.Password = helpers.HashPassword(input.Password)
 	// simpan ke DB
 	tx := repo.db.Create(&userGorm) // proses query insert
 	if tx.Error != nil {
@@ -65,13 +65,13 @@ func (repo *userQuery) SelectAll() ([]user.CoreUser, error) {
 	var usersCoreUser []user.CoreUser
 	for _, value := range usersData {
 		var user = user.CoreUser{
-			ID:       value.ID,
-			FullName: value.FullName,
-			Email:    value.Email,
-			Password: value.Password,
-			TeamId:   value.TeamId,
-			Role:     value.Role,
-			//Status:    value.Status,
+			ID:        value.ID,
+			FullName:  value.FullName,
+			Email:     value.Email,
+			Password:  value.Password,
+			TeamId:    value.TeamId,
+			Role:      value.Role,
+			Status:    value.Status,
 			CreatedAt: value.CreatedAt,
 			UpdatedAt: value.UpdatedAt,
 		}
@@ -92,13 +92,13 @@ func (repo *userQuery) GetByID(id uint) (user.CoreUser, error) {
 	}
 
 	userCoreUser := user.CoreUser{
-		ID:       userGorm.ID,
-		FullName: userGorm.FullName,
-		Email:    userGorm.Email,
-		Password: userGorm.Password,
-		TeamId:   userGorm.TeamId,
-		Role:     userGorm.Role,
-		//Status:    userGorm.Status,
+		ID:        userGorm.ID,
+		FullName:  userGorm.FullName,
+		Email:     userGorm.Email,
+		Password:  userGorm.Password,
+		TeamId:    userGorm.TeamId,
+		Role:      userGorm.Role,
+		Status:    userGorm.Status,
 		CreatedAt: userGorm.CreatedAt,
 		UpdatedAt: userGorm.UpdatedAt,
 	}
@@ -130,7 +130,7 @@ func (repo *userQuery) Update(id uint, updatedUser user.CoreUser) error {
 	userGorm.Password = updatedUser.Password
 	userGorm.TeamId = updatedUser.TeamId
 	userGorm.Role = updatedUser.Role
-	//userGorm.Status = updatedUser.Status
+	userGorm.Status = updatedUser.Status
 
 	tx = repo.db.Save(&userGorm)
 	if tx.Error != nil {

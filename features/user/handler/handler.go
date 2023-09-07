@@ -44,10 +44,6 @@ func (handler *UserHandler) GetAllUser(c echo.Context) error {
 }
 
 func (handler *UserHandler) CreateUser(c echo.Context) error {
-	//userRole := middlewares.ExtractTokenUserRole(c)
-	//if userRole != "super admin" {
-	//return c.JSON(http.StatusForbidden, helpers.WebResponse(http.StatusForbidden, "Access denied. Admin privileges required.", nil))
-	//}
 	userInput := new(UserRequest)
 	errBind := c.Bind(&userInput) // mendapatkan data yang dikirim oleh FE melalui request body
 	if errBind != nil {
@@ -120,7 +116,7 @@ func (handler *UserHandler) DeleteUserByID(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, helpers.WebResponse(http.StatusInternalServerError, "Error", nil))
 	}
 
-	return c.JSON(http.StatusOK, helpers.WebResponse(http.StatusOK, "User berhasil terhapus", nil))
+	return c.JSON(http.StatusOK, helpers.WebResponse(http.StatusOK, "success delete", nil))
 }
 
 func (handler *UserHandler) UpdateUser(c echo.Context) error {
