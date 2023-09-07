@@ -13,6 +13,7 @@ type UserRequest struct {
 	Password string `json:"password"`
 	Role     string `json:"role"`
 	TeamId   uint   `json:"team_id"`
+	Status   string `json:"status"`
 }
 
 func RequestToCore(input UserRequest) user.CoreUser {
@@ -22,5 +23,17 @@ func RequestToCore(input UserRequest) user.CoreUser {
 		Password: input.Password,
 		Role:     input.Role,
 		TeamId:   input.TeamId,
+		Status:   input.Status,
 	}
+}
+func MapReqToCoreUser(req UserRequest) user.CoreUser {
+	return user.CoreUser{
+		FullName: req.FullName,
+		Email:    req.Email,
+		Password: req.Password,
+		Role:     req.Role,
+		TeamId:   req.TeamId,
+		Status:   req.Status,
+	}
+
 }

@@ -5,6 +5,7 @@ import (
 	"kelompok1/immersive-dash/features/user"
 	"kelompok1/immersive-dash/helpers"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/labstack/echo/v4"
@@ -20,29 +21,13 @@ func New(service user.UserServiceInterface) *UserHandler {
 	}
 }
 func (handler *UserHandler) GetAllUser(c echo.Context) error {
-	result, err := handler.userService.GetAll()
+	users, err := handler.userService.GetAll()
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, helpers.WebResponse(http.StatusInternalServerError, "error read data", nil))
+		return c.JSON(http.StatusInternalServerError, helpers.WebResponse(http.StatusInternalServerError, "error fetching users", nil))
 	}
-	// mapping dari struct  to struct response
-	var usersResponse []UserResponse
-	for _, value := range result {
-		usersResponse = append(usersResponse, UserResponse{
-			ID:       value.ID,
-			FullName: value.FullName,
-			Email:    value.Email,
-			Role:     value.Role,
-		})
-	}
-	return c.JSON(http.StatusOK, helpers.WebResponse(http.StatusOK, "success read data", usersResponse))
-	// return c.JSON(http.StatusOK, map[string]any{
-	// 	"code":    200,
-	// 	"message": "success read data",
-	// 	"data":    usersResponse,
-	// })
 
+	return c.JSON(http.StatusOK, helpers.WebResponse(http.StatusOK, "success", users))
 }
-
 func (handler *UserHandler) CreateUser(c echo.Context) error {
 	userInput := new(UserRequest)
 	errBind := c.Bind(&userInput) // mendapatkan data yang dikirim oleh FE melalui request body
@@ -84,66 +69,85 @@ func (h *UserHandler) Login(c echo.Context) error {
 	return c.JSON(http.StatusOK, helpers.WebResponse(http.StatusFound, "login successfully", response))
 }
 func (handler *UserHandler) FindUserByID(c echo.Context) error {
-	id := middlewares.ExtractTokenUserId(c)
-	user, err := handler.userService.GetByID(uint(id))
+	id := c.Param("user_id")
+
+	userID, err := strconv.Atoi(id)
 	if err != nil {
-		if err.Error() == "Tidak ada" {
-			return c.JSON(http.StatusNotFound, helpers.WebResponse(http.StatusNotFound, "User tidak ditemukan", nil))
+		return c.JSON(http.StatusBadRequest, helpers.WebResponse(http.StatusBadRequest, "invalid user ID", nil))
+	}
+
+	user, err := handler.userService.GetByID(uint(userID))
+	if err != nil {
+		if strings.Contains(err.Error(), "not found") {
+			return c.JSON(http.StatusNotFound, helpers.WebResponse(http.StatusNotFound, "user not found", nil))
+		} else {
+			return c.JSON(http.StatusInternalServerError, helpers.WebResponse(http.StatusInternalServerError, "error fetching user", nil))
 		}
-
-		return c.JSON(http.StatusInternalServerError, helpers.WebResponse(http.StatusInternalServerError, "Error", nil))
 	}
 
-	userResponse := UserResponse{
-		ID:       user.ID,
-		FullName: user.FullName,
-		Email:    user.Email,
-		Role:     user.Role,
-	}
-
-	return c.JSON(http.StatusOK, helpers.WebResponse(http.StatusOK, "Berhasil", userResponse))
+	return c.JSON(http.StatusOK, helpers.WebResponse(http.StatusOK, "success", user))
 }
 
 func (handler *UserHandler) DeleteUserByID(c echo.Context) error {
+	id := c.Param("user_id")
+
 	userRole := middlewares.ExtractTokenUserRole(c)
-	if userRole != "super admin" {
+	if userRole == "user" {
 		return c.JSON(http.StatusForbidden, helpers.WebResponse(http.StatusForbidden, "Access denied. Admin privileges required.", nil))
 	}
-	id := middlewares.ExtractTokenUserId(c)
-
-	err := handler.userService.Delete(uint(id))
+	userID, err := strconv.Atoi(id)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, helpers.WebResponse(http.StatusInternalServerError, "Error", nil))
+		return c.JSON(http.StatusBadRequest, helpers.WebResponse(http.StatusBadRequest, "invalid user ID", nil))
 	}
 
-	return c.JSON(http.StatusOK, helpers.WebResponse(http.StatusOK, "success delete", nil))
+	if err := handler.userService.Delete(uint(userID)); err != nil {
+		if strings.Contains(err.Error(), "not found") {
+			return c.JSON(http.StatusNotFound, helpers.WebResponse(http.StatusNotFound, "user not found", nil))
+		} else {
+			return c.JSON(http.StatusInternalServerError, helpers.WebResponse(http.StatusInternalServerError, "error deleting user", nil))
+		}
+	}
+
+	return c.JSON(http.StatusOK, helpers.WebResponse(http.StatusOK, "success deleting user", nil))
 }
 
 func (handler *UserHandler) UpdateUser(c echo.Context) error {
+	id := c.Param("user_id")
+
 	userRole := middlewares.ExtractTokenUserRole(c)
-	if userRole != "super admin" {
+	if userRole == "user" {
 		return c.JSON(http.StatusForbidden, helpers.WebResponse(http.StatusForbidden, "Access denied. Admin privileges required.", nil))
 	}
-	id := middlewares.ExtractTokenUserId(c)
 
-	userInput := new(UserRequest)
-	errBind := c.Bind(&userInput)
-	if errBind != nil {
+	userID, err := strconv.Atoi(id)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, helpers.WebResponse(http.StatusBadRequest, "invalid user ID", nil))
+	}
+
+	// Parse and validate the updated user data from the request body.
+	updatedUserInput := new(UserRequest)
+	if err := c.Bind(updatedUserInput); err != nil {
 		return c.JSON(http.StatusBadRequest, helpers.WebResponse(http.StatusBadRequest, "error bind data. data not valid", nil))
 	}
 
+	// Create a CoreUser instance with the updated data.
 	updatedUser := user.CoreUser{
-		FullName: userInput.FullName,
-		Email:    userInput.Email,
-		Password: userInput.Password,
-		TeamId:   userInput.TeamId,
-		Role:     userInput.Role,
+		FullName: updatedUserInput.FullName,
+		Email:    updatedUserInput.Email,
+		Password: updatedUserInput.Password,
+		Role:     updatedUserInput.Role,
+		TeamId:   updatedUserInput.TeamId,
+		Status:   updatedUserInput.Status,
 	}
 
-	err := handler.userService.Update(uint(id), updatedUser)
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, helpers.WebResponse(http.StatusInternalServerError, "Error updating user", nil))
+	// Call the UpdateUser method in the service layer to update the user.
+	if err := handler.userService.Update(uint(userID), updatedUser); err != nil {
+		if strings.Contains(err.Error(), "not found") {
+			return c.JSON(http.StatusNotFound, helpers.WebResponse(http.StatusNotFound, "user not found", nil))
+		} else {
+			return c.JSON(http.StatusInternalServerError, helpers.WebResponse(http.StatusInternalServerError, "error updating user", nil))
+		}
 	}
 
-	return c.JSON(http.StatusOK, helpers.WebResponse(http.StatusOK, "User updated successfully", nil))
+	return c.JSON(http.StatusOK, helpers.WebResponse(http.StatusOK, "success updating user", nil))
 }

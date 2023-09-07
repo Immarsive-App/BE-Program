@@ -44,7 +44,7 @@ func (s *userService) Login(email string, password string) (user.CoreUser, strin
 	// if !checkPassword {
 	// 	return user.CoreUser{}, "", errors.New("login failed, wrong password")
 	// }
-	token, err := middlewares.CreateToken(int(dataLogin.ID))
+	token, err := middlewares.CreateToken(dataLogin.Role)
 	if err != nil {
 		log.Error("Create token error:", err)
 		return user.CoreUser{}, "", err
