@@ -34,29 +34,27 @@ func (repo *menteeQuery) Insert(input mentee.CoreMentee) (uint, error) {
 }
 
 // SelectAll implements mentee.MenteeDataInterface.
-func (repo *menteeQuery) SelectAll(nameQuery map[string]any) ([]mentee.CoreMentee, error) {
+func (repo *menteeQuery) SelectAll(className, statusName, educationType string) ([]mentee.CoreMentee, error) {
 	var dataMentee []Mentee
 	//query join
 	query := repo.db.Table("mentees").Select("mentees.*, classes.class_name As class_name, statuses.status_name AS status_name").Joins("JOIN classes ON mentees.class_id = classes.id").Joins("JOIN statuses ON mentees.status_id = statuses.id")
 
-	if nameQuery != nil {
-		if className, exist := nameQuery["class_name"]; exist {
-			query = query.Where("classes.class_name = ?", className)
-		}
-		if statusName, exist := nameQuery["status_name"]; exist {
-			query = query.Where("statuses.status_name = ?", statusName)
-		}
-		if educationType, exist := nameQuery["education_type"]; exist {
-			query = query.Where("statuses.education_type = ?", educationType)
-
-		}
+	if className != "" {
+		query = query.Where("classes.class_name = ?", className)
+	}
+	if statusName != "" {
+		query = query.Where("statuses.status_name = ?", statusName)
+	}
+	if educationType != "" {
+		query = query.Where("mentees.education_type = ?", educationType)
 	}
 	// Lanjutkan dengan eksekusi query
 	tx := query.Find(&dataMentee)
 	if tx.Error != nil {
 		return nil, errors.New(tx.Error.Error() + ", failed to get mentee")
 	}
-	if tx.RowsAffected == 0 && nameQuery == nil {
+
+	if tx.RowsAffected == 0 && className == "" && statusName == "" && educationType == "" {
 		// Jika tidak ada query dan tidak ada data, jalankan query tanpa kondisi WHERE
 		tx = repo.db.Find(&dataMentee)
 		if tx.Error != nil {

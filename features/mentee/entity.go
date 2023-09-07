@@ -35,7 +35,7 @@ type CoreMentee struct {
 
 type MenteeDataInterface interface {
 	Insert(input CoreMentee) (uint, error)
-	SelectAll(nameQuery map[string]any) ([]CoreMentee, error)
+	SelectAll(className, statusName, educationType string) ([]CoreMentee, error)
 	Select(menteeId uint) (CoreMentee, error)
 	Update(menteeId uint, updatedMentee CoreMentee) error
 	Delete(menteeId uint) error
@@ -43,7 +43,7 @@ type MenteeDataInterface interface {
 
 type MenteeServiceInterface interface {
 	Create(input CoreMentee) (uint, error)
-	GetAll(nameQuery map[string]any) ([]CoreMentee, error)
+	GetAll(className, statusName, educationType string) ([]CoreMentee, error)
 	GetById(menteeId uint) (CoreMentee, error)
 	Update(menteeId uint, updatedMentee CoreMentee) error
 	Delete(menteeId uint) error

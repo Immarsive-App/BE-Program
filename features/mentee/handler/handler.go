@@ -40,24 +40,20 @@ func (handler *MenteeHandler) CreateMentee(c echo.Context) error {
 
 func (handler *MenteeHandler) GetAllMentee(c echo.Context) error {
 	// Buat query map dengan kriteria pencarian
-	nameQuery := map[string]any{}
-	// 	"class_name":     className,
-	// 	"status_name":    statusName,
-	// 	"education_type": educationType,
-	// }
+
 	className := c.QueryParam("class_name")
-	if className != "" {
-		nameQuery["class_name"] = className
-	}
+	// if className != "" {
+	// 	nameQuery["class_name"] = className
+	// }
 	statusName := c.QueryParam("status_name")
-	if statusName != "" {
-		nameQuery["status_name"] = statusName
-	}
+	// if statusName != "" {
+	// 	nameQuery["status_name"] = statusName
+	// }
 	educationType := c.QueryParam("education_type")
-	if educationType != "" {
-		nameQuery["education_type"] = educationType
-	}
-	result, err := handler.menteeService.GetAll(nameQuery)
+	// if educationType != "" {
+	// 	nameQuery["education_type"] = educationType
+	// }
+	result, err := handler.menteeService.GetAll(className, statusName, educationType)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, helpers.WebResponse(http.StatusInternalServerError, "error read data, "+err.Error(), nil))
 	}

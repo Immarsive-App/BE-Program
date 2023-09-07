@@ -33,9 +33,9 @@ func (service *menteeService) Create(input mentee.CoreMentee) (uint, error) {
 }
 
 // GetAll implements mentee.MenteeServiceInterface.
-func (service *menteeService) GetAll(nameQuery map[string]any) ([]mentee.CoreMentee, error) {
+func (service *menteeService) GetAll(className, statusName, educationType string) ([]mentee.CoreMentee, error) {
 
-	result, err := service.menteeData.SelectAll(nameQuery)
+	result, err := service.menteeData.SelectAll(className, statusName, educationType)
 	if err != nil {
 		return nil, fmt.Errorf("error: %v", err)
 	}
