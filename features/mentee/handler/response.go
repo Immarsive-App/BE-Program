@@ -5,76 +5,55 @@ import (
 	"kelompok1/immersive-dash/features/mentee"
 )
 
-type CreateDeleteResponse struct {
-	ID       uint   `json:"id"`
-	FullName string `json:"full_name"`
-	Email    string `json:"email"`
-	Phone    string `json:"phone"`
-	Telegram string `json:"telegram"`
-	Gender   string `json:"gender"`
+type CreatDeleteMenteeResponse struct {
+	ID       uint   `json:"id,omitempty"`
+	FullName string `json:"full_name,omitempty"`
+	Email    string `json:"email,omitempty"`
+	Phone    string `json:"phone,omitempty"`
+	Telegram string `json:"telegram,omitempty"`
+	Gender   string `json:"gender,omitempty"`
 }
 type GetAllMenteeResponse struct {
-	ID            uint   `json:"id"`
-	ClassID       uint   `json:"class_id"`
-	FullName      string `json:"full_name"`
-	StatusID      uint   `json:"status_id"`
-	EducationType string `json:"education_type"`
-	Gender        string `json:"gender"`
+	ID            uint   `json:"id,omitempty"`
+	FullName      string `json:"full_name,omitempty"`
+	Class         string `json:"class,omitempty"`
+	Status        string `json:"status,omitempty"`
+	EducationType string `json:"education_type,omitempty"`
+	Gender        string `json:"gender,omitempty"`
 }
-type UpdateResponse struct {
-	ID                uint   `json:"mentee_id,omitempty" form:"mentee_id"`
-	StatusId          uint   `json:"status_id,omitempty" form:"status_id"`
-	ClassId           uint   `json:"class_id,omitempty" form:"class_id"`
-	FullName          string `json:"full_name,omitempty" form:"full_name"`
-	CurrentAddress    string `json:"current_address,omitempty" form:"current_address"`
-	HomeAddress       string `json:"home_address,omitempty" form:"home_address"`
-	Email             string `json:"email,omitempty" form:"email"`
-	Gender            string `json:"gender,omitempty" form:"gender"`
-	Telegram          string `json:"telegram,omitempty" form:"telegram"`
-	Phone             string `json:"phone,omitempty" form:"phone"`
-	EmergencyName     string `json:"emergency_name,omitempty" form:"emergency_name"`
-	EmergencyPhone    string `json:"emergency_phone,omitempty" form:"emergency_phone"`
-	EmergencyStatus   string `json:"emergency_status,omitempty" form:"emergency_status"`
-	EducationType     string `json:"education_type,omitempty" form:"education_type"`
-	Institution       string `json:"institution,omitempty" form:"institution"`
-	EducationMajor    string `json:"major,omitempty" form:"major"`
-	EducationGraduate string `json:"graduate,omitempty" form:"graduate"`
-}
-
-type GetByIdResponse struct {
-	ID                uint   `json:"mentee_id,omitempty" form:"mentee_id"`
-	StatusId          uint   `json:"status_id,omitempty" form:"status_id"`
-	ClassId           uint   `json:"class_id,omitempty" form:"class_id"`
-	FullName          string `json:"full_name,omitempty" form:"full_name"`
-	CurrentAddress    string `json:"current_address,omitempty" form:"current_address"`
-	HomeAddress       string `json:"home_address,omitempty" form:"home_address"`
-	Email             string `json:"email,omitempty" form:"email"`
-	Gender            string `json:"gender,omitempty" form:"gender"`
-	Telegram          string `json:"telegram,omitempty" form:"telegram"`
-	Phone             string `json:"phone,omitempty" form:"phone"`
-	EmergencyName     string `json:"emergency_name,omitempty" form:"emergency_name"`
-	EmergencyPhone    string `json:"emergency_phone,omitempty" form:"emergency_phone"`
-	EmergencyStatus   string `json:"emergency_status,omitempty" form:"emergency_status"`
-	EducationType     string `json:"education_type,omitempty" form:"education_type"`
-	Institution       string `json:"institution,omitempty" form:"institution"`
-	EducationMajor    string `json:"major,omitempty" form:"major"`
-	EducationGraduate string `json:"graduate,omitempty" form:"graduate"`
+type GetUpdateMenteeResponse struct {
+	ID                uint   `json:"id,omitempty"`
+	Class             string `json:"class,omitempty"`
+	FullName          string `json:"full_name,omitempty"`
+	CurrentAddress    string `json:"current_address,omitempty"`
+	HomeAddress       string `json:"home_address,omitempty"`
+	Email             string `json:"email,omitempty"`
+	Gender            string `json:"gender,omitempty"`
+	Telegram          string `json:"telegram,omitempty"`
+	Phone             string `json:"phone,omitempty" `
+	EmergencyName     string `json:"emergency_name,omitempty"`
+	EmergencyPhone    string `json:"emergency_phone,omitempty"`
+	EmergencyStatus   string `json:"emergency_status,omitempty"`
+	EducationType     string `json:"education_type,omitempty"`
+	Institution       string `json:"institution,omitempty"`
+	EducationMajor    string `json:"major,omitempty"`
+	EducationGraduate string `json:"graduate,omitempty"`
 }
 
 type GetMenteeFeedbackResponse struct {
-	ID             uint   `json:"mentee_id,omitempty" form:"mentee_id"`
-	FullName       string `json:"full_name,omitempty" form:"full_name"`
-	ClassId        uint   `json:"class_id,omitempty" form:"class_id"`
-	EducationMajor string `json:"major,omitempty" form:"major"`
-	Email          string `json:"email,omitempty" form:"email"`
-	Institution    string `json:"institution,omitempty" form:"institution"`
-	Phone          string `json:"phone,omitempty" form:"phone"`
-	Telegram       string `json:"telegram,omitempty" form:"telegram"`
+	ID             uint   `json:"mentee_id,omitempty"`
+	FullName       string `json:"full_name,omitempty"`
+	Class          string `json:"class,omitempty"`
+	EducationMajor string `json:"major,omitempty"`
+	Email          string `json:"email,omitempty"`
+	Institution    string `json:"institution,omitempty"`
+	Phone          string `json:"phone,omitempty"`
+	Telegram       string `json:"telegram,omitempty"`
 	Feedbacks      []feedback.CoreFeedback
 }
 
-func CoreToCreateDeleteResponse(mentee mentee.CoreMentee) CreateDeleteResponse {
-	return CreateDeleteResponse{
+func CoreToCreateDeleteResponse(mentee mentee.CoreMentee) CreatDeleteMenteeResponse {
+	return CreatDeleteMenteeResponse{
 		ID:       mentee.ID,
 		FullName: mentee.FullName,
 		Email:    mentee.Email,
@@ -84,33 +63,11 @@ func CoreToCreateDeleteResponse(mentee mentee.CoreMentee) CreateDeleteResponse {
 	}
 }
 
-func CoreToUpdateResponse(mentee mentee.CoreMentee) UpdateResponse {
-	return UpdateResponse{
-		ID:                mentee.ID,
-		StatusId:          mentee.StatusId,
-		ClassId:           mentee.ClassId,
-		FullName:          mentee.FullName,
-		CurrentAddress:    mentee.CurrentAddress,
-		HomeAddress:       mentee.HomeAddress,
-		Email:             mentee.Email,
-		Gender:            mentee.Gender,
-		Telegram:          mentee.Telegram,
-		Phone:             mentee.Phone,
-		EmergencyName:     mentee.EmergencyName,
-		EmergencyPhone:    mentee.EmergencyPhone,
-		EmergencyStatus:   mentee.EmergencyStatus,
-		EducationType:     mentee.EducationType,
-		Institution:       mentee.Institution,
-		EducationMajor:    mentee.EducationMajor,
-		EducationGraduate: mentee.EducationGraduate,
-	}
-}
-
-func CoreToGetByIdResponse(mentee mentee.CoreMentee) GetByIdResponse {
-	return GetByIdResponse{
-		ID:                mentee.ID,
-		StatusId:          mentee.StatusId,
-		ClassId:           mentee.ClassId,
+func CoreToReadUpdateResponse(mentee mentee.CoreMentee) GetUpdateMenteeResponse {
+	return GetUpdateMenteeResponse{
+		ID: mentee.ID,
+		// StatusId:          mentee.StatusId,
+		Class:             mentee.Class.ClassName,
 		FullName:          mentee.FullName,
 		CurrentAddress:    mentee.CurrentAddress,
 		HomeAddress:       mentee.HomeAddress,
@@ -131,9 +88,9 @@ func CoreToGetByIdResponse(mentee mentee.CoreMentee) GetByIdResponse {
 func CoreToGetAllResponse(mentee mentee.CoreMentee) GetAllMenteeResponse {
 	return GetAllMenteeResponse{
 		ID:            mentee.ID,
-		ClassID:       mentee.ClassId,
+		Class:         mentee.Class.ClassName,
 		FullName:      mentee.FullName,
-		StatusID:      mentee.StatusId,
+		Status:        mentee.Status.StatusName,
 		EducationType: mentee.EducationType,
 		Gender:        mentee.Gender,
 	}

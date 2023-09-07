@@ -3,6 +3,7 @@ package data
 import (
 	"errors"
 	"kelompok1/immersive-dash/features/mentee"
+	"log"
 
 	"gorm.io/gorm"
 )
@@ -49,7 +50,7 @@ func (repo *menteeQuery) SelectAll(className, statusName, educationType string) 
 		query = query.Where("mentees.education_type = ?", educationType)
 	}
 	// Lanjutkan dengan eksekusi query
-	tx := query.Find(&dataMentee)
+	tx := query.Preload("Status").Preload("Class").Find(&dataMentee)
 	if tx.Error != nil {
 		return nil, errors.New(tx.Error.Error() + ", failed to get mentee")
 	}
@@ -72,23 +73,29 @@ func (repo *menteeQuery) SelectAll(className, statusName, educationType string) 
 
 // Select implements mentee.MenteeDataInterface.
 func (repo *menteeQuery) Select(menteeId uint) (mentee.CoreMentee, error) {
+	log.Printf("Mencari data mentee dengan ID: %d", menteeId)
 	var dataMentee Mentee
-	tx := repo.db.Preload("Feedbacks").First(&dataMentee, menteeId)
+	tx := repo.db.Preload("Status").Preload("Class").Preload("Feedbacks").First(&dataMentee, menteeId)
 	if tx.Error != nil {
+		log.Printf("Terjadi kesalahan saat mencari mentee: %v", tx.Error)
 		return mentee.CoreMentee{}, errors.New(tx.Error.Error() + ", failed to get mentee")
 	}
 	if tx.RowsAffected == 0 {
+		log.Printf("Mentee dengan ID %d tidak ditemukan", menteeId)
 		return mentee.CoreMentee{}, errors.New("Mentee not found")
 	}
 
 	//Mapping Mentee to Corementee
 	coreMentee := ModelToCore(dataMentee)
+	log.Printf("Mentee dengan ID %d ditemukan: %v", menteeId, coreMentee)
+
 	return coreMentee, nil
 }
 
 // Update implements mentee.MenteeDataInterface.
 func (repo *menteeQuery) Update(menteeId uint, updatedMentee mentee.CoreMentee) error {
 	var mentee Mentee
+
 	tx := repo.db.First(&mentee, menteeId)
 	if tx.Error != nil {
 		return errors.New(tx.Error.Error() + ", failed to get mentee")

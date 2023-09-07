@@ -12,7 +12,16 @@ type CoreFeedback struct {
 	UpdatedAt time.Time
 	DeletedAt time.Time
 }
-
+type CoreFeedbackMentee struct {
+	ID        uint
+	UserId    uint
+	MenteeId  uint
+	StatusId  uint
+	Note      string
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt time.Time
+}
 type FeedbackDataInterface interface {
 	// SelectAll() ([]Core, error)
 }

@@ -1,10 +1,12 @@
 package data
 
 import (
+	"kelompok1/immersive-dash/features/class"
 	_dataClass "kelompok1/immersive-dash/features/class/data"
 	"kelompok1/immersive-dash/features/feedback"
 	_dataFeedback "kelompok1/immersive-dash/features/feedback/data"
 	"kelompok1/immersive-dash/features/mentee"
+	"kelompok1/immersive-dash/features/status"
 	_dataStatus "kelompok1/immersive-dash/features/status/data"
 
 	"gorm.io/gorm"
@@ -68,9 +70,14 @@ func ModelToCore(model Mentee) mentee.CoreMentee {
 		coreFeedbacks = append(coreFeedbacks, _dataFeedback.ModelToCore(feedback))
 	}
 	return mentee.CoreMentee{
-		ID:                model.ID,
-		ClassId:           model.ClassId,
-		StatusId:          model.StatusId,
+
+		ID: model.ID,
+		Class: class.CoreClass{
+			ClassName: model.Class.ClassName,
+		},
+		Status: status.CoreStatus{
+			StatusName: model.Status.StatusName,
+		},
 		FullName:          model.FullName,
 		CurrentAddress:    model.CurrentAddress,
 		HomeAddress:       model.HomeAddress,
@@ -101,9 +108,13 @@ func ListModelToCore(models []Mentee) []mentee.CoreMentee {
 			coreFeedbacks = append(coreFeedbacks, _dataFeedback.ModelToCore(feedback))
 		}
 		coreMentees = append(coreMentees, mentee.CoreMentee{
-			ID:                model.ID,
-			ClassId:           model.ClassId,
-			StatusId:          model.StatusId,
+			ID: model.ID,
+			Class: class.CoreClass{
+				ClassName: model.Class.ClassName,
+			},
+			Status: status.CoreStatus{
+				StatusName: model.Status.StatusName,
+			},
 			FullName:          model.FullName,
 			CurrentAddress:    model.CurrentAddress,
 			HomeAddress:       model.HomeAddress,
