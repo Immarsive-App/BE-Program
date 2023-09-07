@@ -11,3 +11,9 @@ func New(repo team.TeamDataInterface) team.TeamServiceInterface {
 		teamData: repo,
 	}
 }
+
+// GetAll implements team.TeamServiceInterface.
+func (service *teamService) GetAll() ([]team.CoreTeam, error) {
+	result, err := service.teamData.SelectAll()
+	return result, err
+}

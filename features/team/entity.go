@@ -15,9 +15,9 @@ type CoreTeam struct {
 }
 
 type TeamDataInterface interface {
-	// SelectAll() ([]Core, error)
+	SelectAll() ([]CoreTeam, error)
 }
 
 type TeamServiceInterface interface {
-	// GetAll() ([]Core, error)
+	GetAll() ([]CoreTeam, error)
 }

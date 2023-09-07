@@ -14,6 +14,10 @@ import (
 	_statusHandler "kelompok1/immersive-dash/features/status/handler"
 	_statusService "kelompok1/immersive-dash/features/status/service"
 
+	_teamData "kelompok1/immersive-dash/features/team/data"
+	_teamHandler "kelompok1/immersive-dash/features/team/handler"
+	_teamService "kelompok1/immersive-dash/features/team/service"
+
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
@@ -31,6 +35,10 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	statusService := _statusService.New(statusRepo)
 	statusHandlerAPI := _statusHandler.New(statusService)
 
+	teamRepo := _teamData.New(db)
+	teamService := _teamService.New(teamRepo)
+	teamHandlerAPI := _teamHandler.New(teamService)
+
 	//User
 	e.POST("/login", userHandlerAPI.Login)
 
@@ -43,5 +51,8 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 
 	// Status
 	e.GET("/statuses", statusHandlerAPI.GetAllStatus, middlewares.JWTMiddleware())
+
+	// Team
+	e.GET("/teams", teamHandlerAPI.GetAllTeam, middlewares.JWTMiddleware())
 
 }
