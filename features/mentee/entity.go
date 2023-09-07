@@ -26,7 +26,7 @@ type CoreMentee struct {
 	CreatedAt         time.Time
 	UpdatedAt         time.Time
 	DeletedAt         time.Time
-	Feedbacks       []feedback.CoreFeedback
+	Feedbacks         []feedback.CoreFeedback
 }
 
 type MenteeDataInterface interface {

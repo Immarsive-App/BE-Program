@@ -1,6 +1,8 @@
 package handler
 
-import "kelompok1/immersive-dash/features/feedback"
+import (
+	"kelompok1/immersive-dash/features/feedback"
+)
 
 type FeedbackRequest struct {
 	Note     string `json:"notes" form:"note"`
