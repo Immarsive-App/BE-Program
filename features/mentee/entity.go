@@ -1,7 +1,9 @@
 package mentee
 
 import (
-	"kelompok1/immersive-dash/features/feedback"
+	_coreClass "kelompok1/immersive-dash/features/class"
+	_coreFeedback "kelompok1/immersive-dash/features/feedback"
+	_coreStatus "kelompok1/immersive-dash/features/status"
 	"time"
 )
 
@@ -9,10 +11,10 @@ type CoreMentee struct {
 	ID                uint
 	StatusId          uint
 	ClassId           uint
-	MenteeName        string
+	FullName          string
 	CurrentAddress    string
 	HomeAddress       string
-	Email             string
+	Email             string /*`validate:"required,email"`*/
 	Gender            string
 	Telegram          string
 	Phone             string
@@ -26,13 +28,23 @@ type CoreMentee struct {
 	CreatedAt         time.Time
 	UpdatedAt         time.Time
 	DeletedAt         time.Time
-	Feedbacks         []feedback.CoreFeedback
+	Feedbacks         []_coreFeedback.CoreFeedback
+	Class             _coreClass.CoreClass
+	Status            _coreStatus.CoreStatus
 }
 
 type MenteeDataInterface interface {
-	// SelectAll() ([]Core, error)
+	Insert(input CoreMentee) (uint, error)
+	SelectAll(className, statusName, educationType string) ([]CoreMentee, error)
+	Select(menteeId uint) (CoreMentee, error)
+	Update(menteeId uint, updatedMentee CoreMentee) error
+	Delete(menteeId uint) error
 }
 
 type MenteeServiceInterface interface {
-	// GetAll() ([]Core, error)
+	Create(input CoreMentee) (uint, error)
+	GetAll(className, statusName, educationType string) ([]CoreMentee, error)
+	GetById(menteeId uint) (CoreMentee, error)
+	Update(menteeId uint, updatedMentee CoreMentee) error
+	Delete(menteeId uint) error
 }

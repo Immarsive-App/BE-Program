@@ -3,9 +3,6 @@ package data
 import (
 	"kelompok1/immersive-dash/features/feedback"
 	_feedbackData "kelompok1/immersive-dash/features/feedback/data"
-	"kelompok1/immersive-dash/features/mentee"
-	"kelompok1/immersive-dash/features/mentee/data"
-	_menteeData "kelompok1/immersive-dash/features/mentee/data"
 	"kelompok1/immersive-dash/features/status"
 
 	"gorm.io/gorm"
@@ -15,7 +12,6 @@ import (
 type Status struct {
 	gorm.Model
 	StatusName string                   `gorm:"status_name;unique;not null"`
-	Mentees    []_menteeData.Mentee     `gorm:"foreignKey:StatusId"`
 	Feedbacks  []_feedbackData.Feedback `gorm:"foreignKey:StatusId"`
 }
 
@@ -23,7 +19,6 @@ func CoreToModel(dataCore status.CoreStatus) Status {
 	return Status{
 		Model:      gorm.Model{},
 		StatusName: dataCore.StatusName,
-		Mentees:    []data.Mentee{},
 		Feedbacks:  []_feedbackData.Feedback{},
 	}
 }
@@ -35,7 +30,6 @@ func ModelToCore(dataModel Status) status.CoreStatus {
 		StatusName: dataModel.StatusName,
 		CreatedAt:  dataModel.CreatedAt,
 		UpdatedAt:  dataModel.UpdatedAt,
-		Mentees:    []mentee.CoreMentee{},
 		Feedbacks:  []feedback.CoreFeedback{},
 	}
 }
