@@ -4,6 +4,7 @@ import (
 	"errors"
 	"kelompok1/immersive-dash/app/middlewares"
 	"kelompok1/immersive-dash/features/user"
+	"kelompok1/immersive-dash/helpers"
 
 	"github.com/labstack/gommon/log"
 )
@@ -40,10 +41,10 @@ func (s *userService) Login(email string, password string) (user.CoreUser, strin
 		log.Error("Service error:", err)
 		return user.CoreUser{}, "", err
 	}
-	// checkPassword := helpers.ComparePassword(password, dataLogin.Password)
-	// if !checkPassword {
-	// 	return user.CoreUser{}, "", errors.New("login failed, wrong password")
-	// }
+	checkPassword := helpers.ComparePassword(password, dataLogin.Password)
+	if !checkPassword {
+		return user.CoreUser{}, "", errors.New("login failed, wrong password")
+	}
 	token, err := middlewares.CreateToken(dataLogin.Role)
 	if err != nil {
 		log.Error("Create token error:", err)
