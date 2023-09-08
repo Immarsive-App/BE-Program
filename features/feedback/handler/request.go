@@ -3,7 +3,7 @@ package handler
 import "kelompok1/immersive-dash/features/feedback"
 
 type FeedbackRequest struct {
-	Note     string `json:"notes" form:"note"`
+	Note     string `json:"note" form:"note"`
 	UserId   uint   `json:"user_id" form:"user_id"`
 	MenteeId uint   `json:"mentee_id" form:"mentee_id"`
 	StatusId uint   `json:"status_id" form:"status_id"`

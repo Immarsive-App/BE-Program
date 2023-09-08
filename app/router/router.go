@@ -2,14 +2,17 @@ package router
 
 import (
 	"kelompok1/immersive-dash/app/middlewares"
-	"kelompok1/immersive-dash/features/user/data"
-	"kelompok1/immersive-dash/features/user/handler"
-	"kelompok1/immersive-dash/features/user/service"
+	_userData "kelompok1/immersive-dash/features/user/data"
+	_userHandler "kelompok1/immersive-dash/features/user/handler"
+	_userService "kelompok1/immersive-dash/features/user/service"
 
 	_classData "kelompok1/immersive-dash/features/class/data"
 	_classHandler "kelompok1/immersive-dash/features/class/handler"
 	_classService "kelompok1/immersive-dash/features/class/service"
 
+	_menteeData "kelompok1/immersive-dash/features/mentee/data"
+	_menteeHandler "kelompok1/immersive-dash/features/mentee/handler"
+	_menteeService "kelompok1/immersive-dash/features/mentee/service"
 	_statusData "kelompok1/immersive-dash/features/status/data"
 	_statusHandler "kelompok1/immersive-dash/features/status/handler"
 	_statusService "kelompok1/immersive-dash/features/status/service"
@@ -23,14 +26,17 @@ import (
 )
 
 func InitRouter(db *gorm.DB, e *echo.Echo) {
-	userRepo := data.New(db)
-	userService := service.New(userRepo)
-	userHandlerAPI := handler.New(userService)
+	userRepo := _userData.New(db)
+	userService := _userService.New(userRepo)
+	userHandlerAPI := _userHandler.New(userService)
 
 	classRepo := _classData.New(db)
 	classService := _classService.New(classRepo)
 	classHandlerAPI := _classHandler.New(classService)
 
+	menteeRepo := _menteeData.New(db)
+	menteeService := _menteeService.New(menteeRepo)
+	menteeHandlerAPI := _menteeHandler.New(menteeService)
 	statusRepo := _statusData.New(db)
 	statusService := _statusService.New(statusRepo)
 	statusHandlerAPI := _statusHandler.New(statusService)
@@ -54,6 +60,14 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	e.PUT("/classes/:class_id", classHandlerAPI.UpdateClass, middlewares.JWTMiddleware())
 	e.DELETE("/classes/:class_id", classHandlerAPI.DeleteClass, middlewares.JWTMiddleware())
 
+	//mentee
+	e.POST("/mentees", menteeHandlerAPI.CreateMentee, middlewares.JWTMiddleware())
+	e.GET("/mentees", menteeHandlerAPI.GetAllMentee, middlewares.JWTMiddleware())
+	e.GET("/mentees/:mentee_id", menteeHandlerAPI.GetMenteeById, middlewares.JWTMiddleware())
+	e.GET("/mentees/:mentee_id/feedbacks", menteeHandlerAPI.GetMenteeFeedback, middlewares.JWTMiddleware())
+	e.PUT("/mentees/:mentee_id", menteeHandlerAPI.UpdateMenteeById, middlewares.JWTMiddleware())
+	e.DELETE("/mentees/:mentee_id", menteeHandlerAPI.DeleteMenteeById, middlewares.JWTMiddleware())
+	e.GET("/mentees/:mentee_id", menteeHandlerAPI.GetMenteeById, middlewares.JWTMiddleware())
 	// Status
 	e.GET("/statuses", statusHandlerAPI.GetAllStatus, middlewares.JWTMiddleware())
 

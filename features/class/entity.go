@@ -1,7 +1,6 @@
 package class
 
 import (
-	"kelompok1/immersive-dash/features/mentee"
 	"time"
 )
 
@@ -12,7 +11,6 @@ type CoreClass struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt time.Time
-	Mentee    []mentee.CoreMentee
 }
 
 type ClassDataInterface interface {
