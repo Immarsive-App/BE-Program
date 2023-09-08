@@ -11,6 +11,19 @@ type feedbackQuery struct {
 	db *gorm.DB
 }
 
+// Insert implements feedback.FeedbackDataInterface
+func (repo *feedbackQuery) Insert(input feedback.CoreFeedback, userId uint) (feedback.CoreFeedback, error) {
+
+	feedbackGorm := CoreToModel(input)
+
+	// simpan ke DB
+	tx := repo.db.Create(&feedbackGorm) // proses query insert
+	if tx.Error != nil {
+		return feedback.CoreFeedback{}, tx.Error
+	}
+	return feedback.CoreFeedback{}, nil
+}
+
 // Delete implements feedback.FeedbackDataInterface
 func (repo *feedbackQuery) Delete(id uint) error {
 	var projectGorm Feedback
@@ -55,18 +68,6 @@ func (repo *feedbackQuery) Update(id uint, input feedback.CoreFeedback) error {
 		return errors.New("data not found")
 	}
 
-	return nil
-}
-
-// Insert implements feedback.FeedbackDataInterface
-func (repo *feedbackQuery) Insert(input feedback.CoreFeedback) error {
-	feedbackGorm := CoreToModel(input)
-
-	// simpan ke DB
-	tx := repo.db.Create(&feedbackGorm) // proses query insert
-	if tx.Error != nil {
-		return tx.Error
-	}
 	return nil
 }
 

@@ -15,26 +15,16 @@ type CoreFeedback struct {
 	DeletedAt time.Time
 }
 
-type UserCore struct {
-	ID       uint
-	FullName string
-}
-
-type StatusCore struct {
-	ID         uint
-	StatusName string
-}
-
 type FeedbackDataInterface interface {
 	SelectAll() ([]CoreFeedback, error)
-	Insert(input CoreFeedback) error
+	Insert(input CoreFeedback, userId uint) (CoreFeedback, error)
 	Update(id uint, input CoreFeedback) error
 	Delete(id uint) error
 }
 
 type FeedbackServiceInterface interface {
 	GetAll() ([]CoreFeedback, error)
-	Create(input CoreFeedback) error
+	Create(input CoreFeedback, userId uint) (CoreFeedback, error)
 	Update(id uint, input CoreFeedback) error
 	Deletes(id uint) error
 }

@@ -30,10 +30,9 @@ func (handler *FeedbackHandler) GetAllFeedback(c echo.Context) error {
 	var feedbackResponse []FeedbackResponse
 	for _, value := range result {
 		feedbackResponse = append(feedbackResponse, FeedbackResponse{
-			ID:       value.ID,
-			StatusId: value.StatusId,
-			Note:     value.Note,
-			UserId:   value.UserId,
+			ID:     value.ID,
+			Note:   value.Note,
+			UserId: value.UserId,
 		})
 	}
 	return c.JSON(http.StatusOK, helpers.WebResponse(http.StatusOK, "success read data", feedbackResponse))
@@ -41,60 +40,68 @@ func (handler *FeedbackHandler) GetAllFeedback(c echo.Context) error {
 }
 
 func (handler *FeedbackHandler) CreateFeedback(c echo.Context) error {
-	id := middlewares.ExtractTokenUserId(c)
-	ids := middlewares.ExtractTokenUserId(c)
-	idss := middlewares.ExtractTokenUserId(c)
+	// Ambil ID pengguna dari token JWT yang terkait dengan permintaan
 	userInput := new(FeedbackRequest)
-	errBind := c.Bind(&userInput) // mendapatkan data yang dikirim oleh FE melalui request body
-	if errBind != nil {
-		return c.JSON(http.StatusBadRequest, helpers.WebResponse(http.StatusBadRequest, "error bind data. data not valid", nil))
-	}
-	//mapping dari struct request to struct core
-	feedbackCore := RequestToCore(*userInput)
-	feedbackCore.UserId = uint(id)
-	feedbackCore.MenteeId = uint(ids)
-	feedbackCore.StatusId = uint(idss)
+	userId := middlewares.ExtractTokenUserId(c)
 
-	err := handler.feedbackService.Create(feedbackCore)
+	// Mendapatkan data yang dikirim oleh FE melalui permintaan body
+
+	if err := c.Bind(userInput); err != nil {
+		return c.JSON(http.StatusBadRequest, helpers.WebResponse(http.StatusBadRequest, "error bind data", nil))
+	}
+
+	// Mapping data dari FeedbackRequest ke CoreFeedback
+	feedbackCore := RequestToCore(*userInput)
+	feedbackCore.UserId = uint(userId)
+	// Panggil fungsi service untuk membuat feedback
+	// Panggil fungsi service untuk membuat feedback
+	result, err := handler.feedbackService.Create(feedbackCore, uint(userId))
 	if err != nil {
 		if strings.Contains(err.Error(), "validation") {
 			return c.JSON(http.StatusBadRequest, helpers.WebResponse(http.StatusBadRequest, err.Error(), nil))
 		} else {
 			return c.JSON(http.StatusInternalServerError, helpers.WebResponse(http.StatusInternalServerError, "error insert data", nil))
-
 		}
 	}
-	return c.JSON(http.StatusOK, helpers.WebResponse(http.StatusCreated, "success insert data", nil))
+
+	// Mapping data hasil operasi ke dalam response
+	response := CoreToResponse(result)
+	// 	ID:       result.ID,
+	// 	Note:     result.Note,
+	// 	UserId:   result.UserId,
+	// 	FullName: result.FullName, // Sesuaikan dengan nama properti yang sesuai dengan data user.
+	// 	Status:   result.Status,   // Sesuaikan dengan nama properti yang sesuai dengan data status.
+	// }
+
+	return c.JSON(http.StatusCreated, helpers.WebResponse(http.StatusCreated, "success insert data", response))
 }
 
 func (handler *FeedbackHandler) UpdateFeedback(c echo.Context) error {
-	// Ambil `user_id` dari parameter URL
-	id := middlewares.ExtractTokenUserId(c)
-	ids := middlewares.ExtractTokenUserId(c)
-	idss := middlewares.ExtractTokenUserId(c)
-	userID, err := strconv.Atoi(c.Param("feedback_id"))
-	if err != nil || userID <= 0 {
-		return c.JSON(http.StatusBadRequest, helpers.WebResponse(http.StatusBadRequest, "Invalid user_id", nil))
+	// Ambil `user_id` dari token
+	userID := middlewares.ExtractTokenUserId(c)
+
+	// Ambil `feedback_id` dari parameter URL
+	feedbackID, err := strconv.Atoi(c.Param("feedback_id"))
+	if err != nil || feedbackID <= 0 {
+		return c.JSON(http.StatusBadRequest, helpers.WebResponse(http.StatusBadRequest, "Invalid feedback_id", nil))
 	}
 
-	// Ambil data pengguna yang akan diperbarui dari permintaan JSON
+	// Ambil data feedback yang akan diperbarui dari permintaan JSON
 	feedbackInput := new(FeedbackRequest)
 	errBind := c.Bind(&feedbackInput)
 	if errBind != nil {
 		return c.JSON(http.StatusBadRequest, helpers.WebResponse(http.StatusBadRequest, "Error binding data", nil))
 	}
 
-	// Mapping data dari UserRequest ke struct Core
+	// Mapping data dari FeedbackRequest ke struct Core
 	feedbackCore := RequestToCore(*feedbackInput)
-	feedbackCore.UserId = uint(id)
-	feedbackCore.MenteeId = uint(ids)
-	feedbackCore.StatusId = uint(idss)
+	feedbackCore.UserId = uint(userID)
 
-	// Panggil fungsi service untuk memperbarui pengguna
-	err = handler.feedbackService.Update(uint(userID), feedbackCore)
+	// Panggil fungsi service untuk memperbarui feedback
+	err = handler.feedbackService.Update(uint(feedbackID), feedbackCore)
 	if err != nil {
 		if strings.Contains(err.Error(), "not found") {
-			return c.JSON(http.StatusNotFound, helpers.WebResponse(http.StatusNotFound, "feedback not found", nil))
+			return c.JSON(http.StatusNotFound, helpers.WebResponse(http.StatusNotFound, "Feedback not found", nil))
 		}
 		return c.JSON(http.StatusInternalServerError, helpers.WebResponse(http.StatusInternalServerError, "Error updating feedback", nil))
 	}

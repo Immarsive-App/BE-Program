@@ -9,9 +9,9 @@ import (
 // struct Feedback gorm model
 type Feedback struct {
 	gorm.Model
-	UserId   uint   `gorm:"column:user_id;not null"`
-	MenteeId uint   `gorm:"column:mentee_id;not null"`
-	StatusId uint   `gorm:"column:status_id;not null"`
+	UserId   uint   `gorm:"column:user_id"`
+	MenteeId uint   `gorm:"column:mentee_id"`
+	StatusId uint   `gorm:"column:status_id"`
 	Note     string `gorm:"column:note;not null"`
 }
 
