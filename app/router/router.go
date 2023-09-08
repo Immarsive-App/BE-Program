@@ -17,6 +17,10 @@ import (
 	_statusHandler "kelompok1/immersive-dash/features/status/handler"
 	_statusService "kelompok1/immersive-dash/features/status/service"
 
+	_feedbackData "kelompok1/immersive-dash/features/feedback/data"
+	_feedbackHandler "kelompok1/immersive-dash/features/feedback/handler"
+	_feedbackService "kelompok1/immersive-dash/features/feedback/service"
+
 	_teamData "kelompok1/immersive-dash/features/team/data"
 	_teamHandler "kelompok1/immersive-dash/features/team/handler"
 	_teamService "kelompok1/immersive-dash/features/team/service"
@@ -40,6 +44,10 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	statusRepo := _statusData.New(db)
 	statusService := _statusService.New(statusRepo)
 	statusHandlerAPI := _statusHandler.New(statusService)
+
+	feedbackRepo := _feedbackData.New(db)
+	feedbackService := _feedbackService.New(feedbackRepo)
+	feedbackHandlerAPI := _feedbackHandler.New(feedbackService)
 
 	teamRepo := _teamData.New(db)
 	teamService := _teamService.New(teamRepo)
@@ -70,6 +78,11 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	e.GET("/mentees/:mentee_id", menteeHandlerAPI.GetMenteeById, middlewares.JWTMiddleware())
 	// Status
 	e.GET("/statuses", statusHandlerAPI.GetAllStatus, middlewares.JWTMiddleware())
+
+	// Feedback
+	e.POST("/feedbacks", feedbackHandlerAPI.CreateFeedback, middlewares.JWTMiddleware())
+	e.PUT("/feedbacks/:feedback_id", feedbackHandlerAPI.UpdateFeedback, middlewares.JWTMiddleware())
+	e.DELETE("/feedbacks/:feedback_id", feedbackHandlerAPI.DeleteFeedback, middlewares.JWTMiddleware())
 
 	// Team
 	e.GET("/teams", teamHandlerAPI.GetAllTeam, middlewares.JWTMiddleware())

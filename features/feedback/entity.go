@@ -1,6 +1,8 @@
 package feedback
 
-import "time"
+import (
+	"time"
+)
 
 type CoreFeedback struct {
 	ID        uint
@@ -23,9 +25,13 @@ type CoreFeedbackMentee struct {
 	DeletedAt time.Time
 }
 type FeedbackDataInterface interface {
-	// SelectAll() ([]Core, error)
+	Insert(input CoreFeedback, userId uint) (CoreFeedback, error)
+	Update(id uint, input CoreFeedback) error
+	Delete(id uint) error
 }
 
 type FeedbackServiceInterface interface {
-	// GetAll() ([]Core, error)
+	Create(input CoreFeedback, userId uint) (CoreFeedback, error)
+	Update(id uint, input CoreFeedback) error
+	Deletes(id uint) error
 }
