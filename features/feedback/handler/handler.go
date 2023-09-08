@@ -21,31 +21,12 @@ func New(service feedback.FeedbackServiceInterface) *FeedbackHandler {
 	}
 }
 
-func (handler *FeedbackHandler) GetAllFeedback(c echo.Context) error {
-	result, err := handler.feedbackService.GetAll()
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, helpers.WebResponse(http.StatusInternalServerError, "error read data", nil))
-	}
-	// mapping dari struct core to struct response
-	var feedbackResponse []FeedbackResponse
-	for _, value := range result {
-		feedbackResponse = append(feedbackResponse, FeedbackResponse{
-			ID:     value.ID,
-			Note:   value.Note,
-			UserId: value.UserId,
-		})
-	}
-	return c.JSON(http.StatusOK, helpers.WebResponse(http.StatusOK, "success read data", feedbackResponse))
-
-}
-
 func (handler *FeedbackHandler) CreateFeedback(c echo.Context) error {
 	// Ambil ID pengguna dari token JWT yang terkait dengan permintaan
 	userInput := new(FeedbackRequest)
 	userId := middlewares.ExtractTokenUserId(c)
 
 	// Mendapatkan data yang dikirim oleh FE melalui permintaan body
-
 	if err := c.Bind(userInput); err != nil {
 		return c.JSON(http.StatusBadRequest, helpers.WebResponse(http.StatusBadRequest, "error bind data", nil))
 	}
@@ -53,9 +34,9 @@ func (handler *FeedbackHandler) CreateFeedback(c echo.Context) error {
 	// Mapping data dari FeedbackRequest ke CoreFeedback
 	feedbackCore := RequestToCore(*userInput)
 	feedbackCore.UserId = uint(userId)
+
 	// Panggil fungsi service untuk membuat feedback
-	// Panggil fungsi service untuk membuat feedback
-	result, err := handler.feedbackService.Create(feedbackCore, uint(userId))
+	_, err := handler.feedbackService.Create(feedbackCore, uint(userId))
 	if err != nil {
 		if strings.Contains(err.Error(), "validation") {
 			return c.JSON(http.StatusBadRequest, helpers.WebResponse(http.StatusBadRequest, err.Error(), nil))
@@ -64,16 +45,12 @@ func (handler *FeedbackHandler) CreateFeedback(c echo.Context) error {
 		}
 	}
 
-	// Mapping data hasil operasi ke dalam response
-	response := CoreToResponse(result)
-	// 	ID:       result.ID,
-	// 	Note:     result.Note,
-	// 	UserId:   result.UserId,
-	// 	FullName: result.FullName, // Sesuaikan dengan nama properti yang sesuai dengan data user.
-	// 	Status:   result.Status,   // Sesuaikan dengan nama properti yang sesuai dengan data status.
-	// }
+	// Hanya mengembalikan pesan "message" saat berhasil insert
+	response := map[string]string{
+		"message": "success insert data",
+	}
 
-	return c.JSON(http.StatusCreated, helpers.WebResponse(http.StatusCreated, "success insert data", response))
+	return c.JSON(http.StatusCreated, response)
 }
 
 func (handler *FeedbackHandler) UpdateFeedback(c echo.Context) error {

@@ -71,19 +71,6 @@ func (repo *feedbackQuery) Update(id uint, input feedback.CoreFeedback) error {
 	return nil
 }
 
-// SelectAll implements feedback.FeedbackDataInterface
-func (repo *feedbackQuery) SelectAll() ([]feedback.CoreFeedback, error) {
-	var feedbackData []Feedback
-	tx := repo.db.Find(&feedbackData)
-	if tx.Error != nil {
-		return nil, tx.Error
-	}
-	//mapping dari struct gorm model ke struct core (entity)
-	var feedbackCore = ListModelToCore(feedbackData)
-
-	return feedbackCore, nil
-}
-
 func New(db *gorm.DB) feedback.FeedbackDataInterface {
 	return &feedbackQuery{
 		db: db,

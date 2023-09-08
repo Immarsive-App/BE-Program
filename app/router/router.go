@@ -53,7 +53,6 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	e.GET("/statuses", statusHandlerAPI.GetAllStatus, middlewares.JWTMiddleware())
 
 	// Feedback
-	e.GET("/feedbacks", feedbackHandlerAPI.GetAllFeedback, middlewares.JWTMiddleware())
 	e.POST("/feedbacks", feedbackHandlerAPI.CreateFeedback, middlewares.JWTMiddleware())
 	e.PUT("/feedbacks/:feedback_id", feedbackHandlerAPI.UpdateFeedback, middlewares.JWTMiddleware())
 	e.DELETE("/feedbacks/:feedback_id", feedbackHandlerAPI.DeleteFeedback, middlewares.JWTMiddleware())

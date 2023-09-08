@@ -16,14 +16,12 @@ type CoreFeedback struct {
 }
 
 type FeedbackDataInterface interface {
-	SelectAll() ([]CoreFeedback, error)
 	Insert(input CoreFeedback, userId uint) (CoreFeedback, error)
 	Update(id uint, input CoreFeedback) error
 	Delete(id uint) error
 }
 
 type FeedbackServiceInterface interface {
-	GetAll() ([]CoreFeedback, error)
 	Create(input CoreFeedback, userId uint) (CoreFeedback, error)
 	Update(id uint, input CoreFeedback) error
 	Deletes(id uint) error
