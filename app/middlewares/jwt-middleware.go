@@ -11,12 +11,12 @@ import (
 
 func JWTMiddleware() echo.MiddlewareFunc {
 	return echojwt.WithConfig(echojwt.Config{
-		SigningKey:    []byte(config.JWT_SECRET),
+		SigningKey:    []byte(config.SECRET_JWT),
 		SigningMethod: "HS256",
 	})
 }
 
-func CreateToken(userId int) (string, error) {
+func CreateToken(userId string) (string, error) {
 	var userRole string
 	claims := jwt.MapClaims{}
 	claims["authorized"] = true
@@ -24,7 +24,7 @@ func CreateToken(userId int) (string, error) {
 	claims["userRole"] = userRole
 	claims["exp"] = time.Now().Add(time.Hour * 1).Unix() //Token expires after 1 hour
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString([]byte(config.JWT_SECRET))
+	return token.SignedString([]byte(config.SECRET_JWT))
 
 }
 

@@ -15,9 +15,9 @@ type CoreStatus struct {
 }
 
 type StatusDataInterface interface {
-	// SelectAll() ([]Core, error)
+	SelectAll() ([]CoreStatus, error)
 }
 
 type StatusServiceInterface interface {
-	// GetAll() ([]Core, error)
+	GetAll() ([]CoreStatus, error)
 }

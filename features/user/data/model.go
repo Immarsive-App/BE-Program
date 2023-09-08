@@ -16,7 +16,7 @@ type User struct {
 	Password  string                   `gorm:"column:password;not null"`
 	TeamId    uint                     `gorm:"column:team_id;not null"`
 	Role      string                   `gorm:"type:enum('super admin','user');default:'user';column:role;not null"`
-	Status    bool                     `gorm:"column:status;not null"`
+	Status    string                   `gorm:"column:status;not null"`
 	Classes   []_classData.Class       `gorm:"foreignKey:UserId"`
 	Feedbacks []_feedbackData.Feedback `gorm:"foreignKey:UserId"`
 }
